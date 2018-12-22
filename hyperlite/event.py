@@ -2,13 +2,13 @@
 
 class Event:
     ''' Some Private Property That Is Helping In Implementing An Event Based Mechanism'''
-    __events: list = [str]
+    __events: list = []
     __callbacks: dict = {}
 
     # Static Method For Register An Event And Its Appropriate Callbacks
     @staticmethod
     def on(event: str, callback):
-        Event.__events.append(str)
+        Event.__events.append(event)
         Event.__callbacks.update({
             event: callback
         })
