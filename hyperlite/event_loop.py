@@ -1,10 +1,11 @@
 """ Event Loop The Heart Of HyperLite DB """
 
 from .process import Process
+from .event import Event
 
 class EventLoop:
     def __init__(self):
-        self.events = []
+        self.events: Event = []
         self.callbacks = []
         self.system_process: Process = []
 
