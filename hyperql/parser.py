@@ -39,11 +39,23 @@ class QueryOperations:
     def not_operation(field):
         return not field
 
+    @staticmethod
+    def get_from_command(cmd):
+        operations = {
+            "&eq": QueryOperations.equal_to,
+            "&neq": QueryOperations.not_equal_to,
+            "&gt": QueryOperations.graeter_than,
+            "&lt": QueryOperations.less_than,
+            "&gte": QueryOperations.graeter_than_equal,
+            "&lte": QueryOperations.less_than_equal
+        }
+        return operations.get(cmd)
+
+
 class Query :
     def __init__(self):
         self.required_field = []
-        self.needed_query_methods = {}
-
+        self.needed_query_methods = []
     
 
 def hyperql_parser(query: str) -> Query:
@@ -57,12 +69,27 @@ def hyperql_parser(query: str) -> Query:
     def get_field_name(raw_query):
         return raw_query[0 : raw_query.find("=")]
 
+    def get_filter(raw_query):
+        cmd = raw_query[raw_query.find("&") : raw_query.find("'", raw_query.find("&"))]
+        print(cmd)
+        return QueryOperations.get_from_command(cmd)
+
+    def parse_filters(raw_query):
+        field = get_field_name(raw_query)
+        filter = get_filter(raw_query)
+        query_obj.needed_query_methods.append({
+            "field": field,
+            "filter": filter
+        })
+
     for instraction in query.split(","):
         query_instractions.append(re.sub(space_pattern, '', instraction))
     
     for raw_query in query_instractions:
         if raw_query.find("=") > -1:
             query_obj.required_field.append(get_field_name(raw_query))
+        
+        parse_filters(raw_query)
 
     return query_obj
 
@@ -76,4 +103,4 @@ if __name__ == "__main__":
             """
     obj = hyperql_parser(query)
 
-    print(obj.required_field)
+    print(obj.needed_query_methods)
