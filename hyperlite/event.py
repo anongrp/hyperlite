@@ -1,7 +1,7 @@
 """ Event Mechanism """
 
 class Event:
-    ''' Some Private Property That Is Helping In Implementing An Event Based Mechanism'''
+    ''' Some Private Property That Is Helping In Implementing An Event Based Mechanism '''
     __events: list = []
     __callbacks: dict = {}
 
