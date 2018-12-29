@@ -1,0 +1,29 @@
+{
+    "Insert": {
+    
+        "meta": {
+            "Database": "Database Name",
+            "Collection": "Collection Name"
+        },
+        "data": {
+            "name": "User name",
+            "age": 19,
+            "address": {
+                "city": "City Name",
+                "street": "street Name",
+                "Country": "The India"
+            },
+            "email": "username@gmail.com",
+            "posts": {
+                "title": "hfkjhgdhgvkd",
+                "desc": "nfdkbhhkfdhvkjdhkxfd",
+                "author": "Author name"
+            },
+            "hobbies": [
+                "Programming",
+                "Developing",
+                "Designing"
+            ]
+        }
+    }
+ }
