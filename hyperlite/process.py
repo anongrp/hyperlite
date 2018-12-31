@@ -9,7 +9,7 @@ class ProcessType(Enum):
 
 class Process:
     def __init__(self):
-        self.type: ProcessType.Query
+        self.type: ProcessType
 
     def exec(self):
         pass
