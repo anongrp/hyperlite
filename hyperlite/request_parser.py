@@ -18,18 +18,18 @@ class Parser:
 class ParsedData:
     
     def __init__(self):
-        self.request_type: RequestType
-        self.meta_data: dict = {}
-        self.user_data: dict = {}
+        request_type: RequestType
+        meta_data: dict = {}
+        user_data: dict = {}
 
     def __str__(self):
-        return str(self.request_type) + str(self.meta_data) + str(self.user_data)
+        return str(request_type) + str(self.meta_data) + str(self.user_data)
 
 class RequestType(Enum):
     Insert = 1
     Update = 2
 
-with open(r'test\test.json','r') as f1:
+with open(r'C:\Users\Gaurav\Documents\GitHub\hyperlite\test\test.json','r') as f1:
     # data = json.load(f1)
     data = f1.read()
 
