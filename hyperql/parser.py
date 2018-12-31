@@ -113,4 +113,5 @@ if __name__ == "__main__":
             """
     obj = hyperql_parser(query)
 
-    print(obj.needed_query_methods)
+    for instruction in obj.needed_query_methods:
+        print(instruction)
