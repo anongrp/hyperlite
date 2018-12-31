@@ -52,7 +52,7 @@ class QueryOperations:
             "&lt": QueryOperations.less_than,
             "&gte": QueryOperations.graeter_than_equal,
             "&lte": QueryOperations.less_than_equal,
-            "__it": QueryOperations.echo
+            "it": QueryOperations.echo
         }
         return operations.get(cmd)
 
@@ -78,8 +78,8 @@ def hyperql_parser(query: str) -> Query:
             return raw_query[0 : raw_query.find("&")].strip()
 
     def get_filter(raw_query):
-        if raw_query.find('__it') > -1:
-            return QueryOperations.get_from_command("__it")
+        if raw_query.find(' it') > -1:
+            return QueryOperations.get_from_command("it")
         else:
             cmd = raw_query[raw_query.find("&") : raw_query.find(" ", raw_query.find("&"))]
             return QueryOperations.get_from_command(cmd)
@@ -107,8 +107,8 @@ def hyperql_parser(query: str) -> Query:
 
 if __name__ == "__main__":
     query = """ 
-            name = __it, 
-            age = __it, 
+            name = it, 
+            age = it, 
             city &eq "city_name"
             """
     obj = hyperql_parser(query)
