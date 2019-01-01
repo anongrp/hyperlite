@@ -15,8 +15,12 @@ class Collection:
     def getTBName(self):
         return self.__tb_name
     
-    def addCol(self,col_name: str):
-        self.columns.append(col_name)
+    def insert(self,meta_data: dict, user_data: dict):
+        Database, Collection = self.__meta_separator(meta_data)
+        pass
     
+    def __meta_separator(self, meta_data: dict) -> list:
+        return [meta for meta in meta_data.values()]
+
     def dropCollection(self):
         pass

@@ -12,7 +12,7 @@ class QueryOperations:
         return data != field
 
     @staticmethod
-    def graeter_than(data, field):
+    def greater_than(data, field):
         return data > field
 
     @staticmethod
@@ -20,7 +20,7 @@ class QueryOperations:
         return data < field
 
     @staticmethod
-    def graeter_than_equal(data, field):
+    def greater_than_equal(data, field):
         return data >= field
 
     @staticmethod
@@ -48,9 +48,9 @@ class QueryOperations:
         operations = {
             "&eq": QueryOperations.equal_to,
             "&neq": QueryOperations.not_equal_to,
-            "&gt": QueryOperations.graeter_than,
+            "&gt": QueryOperations.greater_than,
             "&lt": QueryOperations.less_than,
-            "&gte": QueryOperations.graeter_than_equal,
+            "&gte": QueryOperations.greater_than_equal,
             "&lte": QueryOperations.less_than_equal,
             "it": QueryOperations.echo
         }
@@ -66,7 +66,7 @@ class Query :
 def hyperql_parser(query: str) -> Query:
 
     query_obj = Query()
-    query_instractions = []
+    query_instructions = []
 
     # For removing the white spaces
     space_pattern = re.compile(r'\s+')
@@ -92,10 +92,10 @@ def hyperql_parser(query: str) -> Query:
             "filter": filter
         })
 
-    for instraction in query.strip().split(","):
-        query_instractions.append(instraction.strip())
+    for instruction in query.strip().split(","):
+        query_instructions.append(instruction.strip())
     
-    for raw_query in query_instractions:
+    for raw_query in query_instructions:
         if raw_query.find("=") > -1:
             query_obj.required_field.append(get_field_name(raw_query))
         
