@@ -22,7 +22,7 @@ class Database:
         return self.__creation_date
 
     def getCollections(self):
-        return self.__collections.keys
+        return list(self.__collections.keys())
     
     def getCollectionInfo(self, collection_name: str):
         return dict['collection_name']
