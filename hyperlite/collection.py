@@ -15,13 +15,9 @@ class Collection:
     def getTBName(self):
         return self.col_name
     
-    def insert(self,meta_data: dict, user_data: dict):
+    def insert(self, meta_data: dict, user_data: dict):
         Database, Collection = self.__meta_separator(meta_data)
-        for(collection in db.getCollections()):
-            if collection == Collection:
-                pass
-            else:
-                pass        
+        pass
     
     
     def __meta_separator(self, meta_data: dict) -> list:
