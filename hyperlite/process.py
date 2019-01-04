@@ -1,11 +1,6 @@
 """ Its all about processes and tasks  """
 
-from enum import Enum
 from threading import Thread
-
-class ProcessType(Enum):
-    Query = 1
-    Writing = 2
 
 
 class Process(Thread):
@@ -13,11 +8,12 @@ class Process(Thread):
         super().__init__(self)
         self.task_queue: list = []                 # List of Events
 
-    def __exec(self, process_id: int):
-        # Acquire Lock
-        self.task_queue.remove(process_id)
-        # Release Lock
+    def __exec(self, event_id: int):
+        event = self.task_queue[event_id]
+        for task in event.events:
+            event.emmit(task)
+        self.task_queue.remove(event_id)
 
     def run(self):
-        for process_id in enumerate(self.task_queue):
-            self.__exec(process_id)
+        for event_id in enumerate(self.task_queue):
+            self.__exec(event_id)

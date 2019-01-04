@@ -1,23 +1,24 @@
 """ Event Mechanism """
 
 class Event:
-    ''' Some Private Property That Is Helping In Implementing An Event Based Mechanism '''
-    __events: list = []
-    __callbacks: dict = {}
 
-    # Static Method For Register An Event And Its Appropriate Callbacks
-    @staticmethod
-    def on(event: str, callback):
-        Event.__events.append(event)
-        Event.__callbacks.update({
+    '''   Initialization of default Event Object.   '''
+    def __init__(self):
+        self.events: list = []
+        self.callbacks: dict = {}                      # Dictionary of lists   ''' callback, data = [0,1]  '''
+
+    # Method For Register An Event And Its Appropriate Callbacks
+    def on(self, event: str, callback):
+        self.events.append(event)
+        self.callbacks.update({
             event: callback
         })
 
         
-    # Static Method For Executing And Passing Data To The Callbacked That Is Associated To An Certain Event
-    @staticmethod
-    def emmit(event: str, data = None):
-        callback = Event.__callbacks.get(event)
+    # Method For Executing And Passing Data To The Callbacked That Is Associated To An Certain Event
+    def emmit(self, event: str):
+        callback = self.callbacks.get(event)[0]
+        data = self.callbacks.get(event)[1]
         if callback is not None:
             if data is not None:
                 callback(data)

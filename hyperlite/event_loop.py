@@ -4,7 +4,7 @@ from .process import Process
 
 class EventLoop:
     def __init__(self):
-        self.user_process: Process =[]
+        self.user_process: Process = []
         self.system_process: Process = []
 
     def execute_sys_process(self):
