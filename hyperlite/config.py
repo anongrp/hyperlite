@@ -12,7 +12,7 @@ _WIN_DB_PATH = r"C:\\data\\hyperlite_db"
 # *Private* Path for database if platform is linux
 _LINUX_DB_PATH = r"/home/.data/hyperlite_db"
 
-# *Public* it's used in  production
+# *Public* it's used in production
 DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
 
 # Database fromat
