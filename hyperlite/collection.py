@@ -6,7 +6,8 @@ class Collection:
 
     def __init__(self, col_name: str, parent: Database):
         self.col_name = col_name
-        self.objects = {}
+        self.objects = []
+        self.indices = {}
         self.col_id = Collections.generate_id(self)
         self.parent = parent
 
@@ -16,8 +17,9 @@ class Collection:
     def insert(self, collection_id: str, user_data: dict):
         collection = Collections.get_collection(collection_id)
         object_id = Objects.generate_id(collection)
-        collection.objects.update({
-            object_id: user_data
+        self.objects.append(user_data)
+        collection.incides.update({
+            object_id: self.object.__len__()
         })
         return object_id
 
