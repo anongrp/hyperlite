@@ -1,19 +1,19 @@
 """ Its all about processes and tasks  """
 
-from threading import Thread
+from enum import Enum
 
 
-class Process(Thread):
-    def __init__(self):
-        super().__init__(self)
-        self.task_queue: list = []                 # List of Events
+class ProcessType(Enum):
+    Read = 1
+    Insert = 2
+    Delete = 3
+    Update = 4
 
-    def __exec(self, event_id: int):
-        event = self.task_queue[event_id]
-        for task in event.events:
-            event.emmit(task)
-        self.task_queue.remove(event_id)
 
-    def run(self):
-        for event_id in enumerate(self.task_queue):
-            self.__exec(event_id)
+class Process:
+    def __init__(self, process_name: ProcessType, process_data: dict):
+        self.process_name: ProcessType = process_name
+        self.process_data: dict = process_data
+
+    def exec(self):
+        pass
