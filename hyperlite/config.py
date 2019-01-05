@@ -15,7 +15,7 @@ _LINUX_DB_PATH = r"/home/.data/hyperlite_db"
 # *Public* it's used in production
 DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
 
-# Database fromat
+# Database format
 DATABASE_FORMAT = {
     'type': 'bson',
     'format': 'binary'
