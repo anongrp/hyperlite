@@ -17,8 +17,6 @@ DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
 
 # Database fromat
 DATABASE_FORMAT = {
-    'type': 'json',
-    'format': 'text'
+    'type': 'bson',
+    'format': 'binary'
 }
-
-print(DATABASE_FORMAT)
