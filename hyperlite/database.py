@@ -5,7 +5,7 @@ from time import gmtime, strftime
 class Database:
 
     def __init__(self, __db_name: str, __collections: dict = {}):
-        self.__db_name = __db_name
+        self.name = __db_name
         self.__collections = __collections
         self.__creation_date: str = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
