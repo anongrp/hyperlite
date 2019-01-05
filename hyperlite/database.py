@@ -4,9 +4,9 @@ from time import gmtime, strftime
 
 class Database:
 
-    def __init__(self, __db_name: str, __collections: []):
-        self.name = __db_name
-        self.collections = __collections
+    def __init__(self, __db_name: str, __collections: dict = {}):
+        self.__db_name = __db_name
+        self.__collections = __collections
         self.__creation_date: str = strftime("%Y-%m-%d %H:%M:%S", gmtime())
 
     def __str__(self):
