@@ -2,23 +2,23 @@
 
 from .database import Database
 
+
 class Collection:
 
     def __init__(self, col_name: str, parent: Database):
         self.col_name = col_name
         self.objects = []
         self.indices = {}
-        self.col_id = Collections.generate_id(self)
         self.parent = parent
+        Collections.add_collection(self)
 
     def __str__(self):
         return self.col_name
 
-    def insert(self, collection_id: str, user_data: dict):
-        collection = Collections.get_collection(collection_id)
-        object_id = Objects.generate_id(collection)
+    def insert(self, user_data: dict):
+        object_id = Objects.generate_id(self)
         self.objects.append(user_data)
-        collection.incides.update({
+        self.incides.update({
             object_id: self.object.__len__()
         })
         return object_id
@@ -42,23 +42,22 @@ class Collections:
     collection_list = {}
 
     @classmethod
-    def generate_id(cls, collection: Collection) -> str:
-        col_id = ''
+    def add_collection(cls, collection: Collection):
         Collections.collection_list.update({
-            col_id: collection
+            collection.col_name: collection
         })
-        return col_id
 
     @classmethod
-    def get_collection(cls, col_id: str):
-        collection = Collections.collection_list.get(col_id)
+    def get_collection(cls, col_name: str):
+        collection = Collections.collection_list.get(col_name)
         return collection
 
 
 class Objects:
     """    Helps to Maintain record of all Objects"""
+    object_count = 0
 
     @classmethod
     def generate_id(cls, collection: Collection) -> str:
-        obj_id = ''
+        obj_id = collection.parent.db_name + ' ' + collection.col_name + ' ' + str(Objects.object_count + 1)
         return obj_id
