@@ -1,19 +1,15 @@
-# import json
-
-# with open('test.json','r') as f1:
-#     # data = json.load(f1)
-#     data = f1.read()
-
-# # print(data[list(data.keys())[0]]["meta"])
-
-# # print(data["Insert"]["data"])
-# print(type(data))
-
-# print(data)
+from hyperlite.database import Database
+from hyperlite.collection import Collection
+from hyperlite.request_parser import Parser
+from hyperlite.process import Process
 
 
+with open('test.json', 'r') as f1:
+    data = f1.read()
 
-name = str('Gaurav')
-var1 = 'name'
 
-print(name)
+db = Database('db-1')
+col = Collection('col-1', db)
+data = Parser.parse(data)
+process1 = Process(data)
+process1.exec()
