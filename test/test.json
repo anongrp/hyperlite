@@ -1,9 +1,8 @@
 {
     "Insert": {
-    
         "meta": {
-            "Database": "Database Name",
-            "Collection": "Collection Name"
+            "Database": "db-1",
+            "Collection": "col-1"
         },
         "data": {
             "name": "User name",

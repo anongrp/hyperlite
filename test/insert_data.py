@@ -13,3 +13,5 @@ col = Collection('col-1', db)
 data = Parser.parse(data)
 process1 = Process(data)
 process1.exec()
+
+print(col.objects)

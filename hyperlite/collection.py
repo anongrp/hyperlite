@@ -18,8 +18,8 @@ class Collection:
     def insert(self, user_data: dict):
         object_id = Objects.generate_id(self)
         self.objects.append(user_data)
-        self.incides.update({
-            object_id: self.object.__len__()
+        self.indices.update({
+            object_id: self.objects.__len__()
         })
         return object_id
 
