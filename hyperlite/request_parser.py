@@ -3,8 +3,9 @@
 import json
 from enum import Enum
 
+
 class Parser:
-    
+
     # Method to parse JSON string.
     @staticmethod
     def parse(raw_data: str):
@@ -15,8 +16,9 @@ class Parser:
         data.user_data = raw_data[list(raw_data.keys())[0]]["data"]
         return data
 
+
 class ParsedData:
-    
+
     def __init__(self):
         self.request_type: RequestType
         self.meta_data: dict = {}
@@ -24,6 +26,7 @@ class ParsedData:
 
     def __str__(self):
         return str(self.request_type) + str(self.meta_data) + str(self.user_data)
+
 
 class RequestType(Enum):
     Read = 1
