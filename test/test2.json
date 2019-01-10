@@ -1,0 +1,24 @@
+{
+    "Insert": {
+        "meta": {
+            "Database": "db-1",
+            "Collection": "col-1"
+        },
+        "data": {
+            "name": "Gaurav",
+            "age": 19,
+            "city": "Indore",
+            "email": "username@gmail.com",
+            "posts": {
+                "title": "hfkjhgdhgvkd",
+                "desc": "nfdkbhhkfdhvkjdhkxfd",
+                "author": "Author name"
+            },
+            "hobbies": [
+                "Programming",
+                "Developing",
+                "Designing"
+            ]
+        }
+    }
+ }

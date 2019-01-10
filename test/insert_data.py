@@ -4,7 +4,7 @@ from hyperlite.request_parser import Parser
 from hyperlite.process import Process
 
 
-with open('test.json', 'r') as f1:
+with open('test2.json', 'r') as f1:
     data = f1.read()
 
 
