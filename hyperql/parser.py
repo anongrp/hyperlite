@@ -1,6 +1,5 @@
 """ Parser module help to parse hyperql query language to an plan python object """
 
-import re
 
 class QueryOperations:
     @staticmethod
@@ -13,19 +12,19 @@ class QueryOperations:
 
     @staticmethod
     def greater_than(data, field):
-        return data > field
-
-    @staticmethod
-    def less_than(data, field):
         return data < field
 
     @staticmethod
+    def less_than(data, field):
+        return data > field
+
+    @staticmethod
     def greater_than_equal(data, field):
-        return data >= field
+        return data <= field
 
     @staticmethod
     def less_than_equal(data, field):
-        return data <= field
+        return data >= field
 
     @staticmethod
     def and_operation(data, field):
@@ -57,35 +56,32 @@ class QueryOperations:
         return operations.get(cmd)
 
 
-class Query :
+class Query:
     def __init__(self):
         self.required_field = []
         self.needed_query_methods = []
-    
+
 
 def hyperql_parser(query: str) -> Query:
-
     query_obj = Query()
     query_instructions = []
 
-    # For removing the white spaces
-    space_pattern = re.compile(r'\s+')
-    
     def get_field_name(raw_query):
         if raw_query.find('=') > -1:
-            return raw_query[0 : raw_query.find("=")].strip()
+            return raw_query[0: raw_query.find("=")].strip()
         else:
-            return raw_query[0 : raw_query.find("&")].strip()
+            return raw_query[0: raw_query.find("&")].strip()
 
     def get_filter(raw_query):
         if raw_query.find(' it') > -1:
             return QueryOperations.get_from_command("it")
         else:
-            cmd = raw_query[raw_query.find("&") : raw_query.find(" ", raw_query.find("&"))]
+            cmd = raw_query[raw_query.find("&"): raw_query.find(" ", raw_query.find("&"))]
             return QueryOperations.get_from_command(cmd)
 
     def get_data(raw_query):
-        return raw_query[raw_query.find('"') + 1 : raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find('"') > 0 else None
+        return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
+            '"') > 0 else None
 
     def parse_filters(raw_query):
         field = get_field_name(raw_query)
@@ -98,15 +94,14 @@ def hyperql_parser(query: str) -> Query:
 
     for instruction in query.strip().split(","):
         query_instructions.append(instruction.strip())
-    
+
     for raw_query in query_instructions:
         if raw_query.find("=") > -1:
             query_obj.required_field.append(get_field_name(raw_query))
-        
+
         parse_filters(raw_query)
 
     return query_obj
-
 
 
 if __name__ == "__main__":

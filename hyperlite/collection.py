@@ -26,8 +26,22 @@ class Collection:
     def update(self, *args, **kwargs):
         pass
 
-    def read(self, *args, **kwargs):
-        pass
+    def read(self, objects: list, instruction: dict = {}, instructions: list = []):
+        if not instructions:
+            output_objs =[]
+            for object in objects:
+                if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
+                    output_objs.append(object)
+        else:
+            output_objs = []
+            for object in objects:
+                output_obj = {}
+                for instruction in instructions:
+                    if object[instruction['field']]:
+                        output_obj.update({
+                            instruction['field']: object[instruction['field']]
+                        })
+                output_objs.append(output_obj)
 
     def delete(self, *args, **kwargs):
         pass
@@ -59,5 +73,5 @@ class Objects:
 
     @classmethod
     def generate_id(cls, collection: Collection) -> str:
-        obj_id = collection.parent.db_name + ' ' + collection.col_name + ' ' + str(Objects.object_count + 1)
+        obj_id = collection.parent.db_name + '.' + collection.col_name + '.' + str(Objects.object_count + 1)
         return obj_id
