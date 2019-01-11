@@ -16,8 +16,6 @@ if __name__ == "__main__":
     data = request_parser.Parser.parse(data)
     process1 = process.Process(data)
 
-    print(col.objects)
-
     with open('test/test.json', 'r') as f:
         data = f.read()
     data = request_parser.Parser.parse(data)

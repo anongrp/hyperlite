@@ -27,13 +27,14 @@ class Collection:
         pass
 
     def read(self, objects: list, instruction: dict = {}, instructions: list = []):
+        output_objs =[]
         if not instructions:
-            output_objs =[]
             for object in objects:
+                print(instruction['filter'](data=instruction['data'], field=object[instruction['field']]))
                 if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
                     output_objs.append(object)
+            return output_objs
         else:
-            output_objs = []
             for object in objects:
                 output_obj = {}
                 for instruction in instructions:
@@ -42,6 +43,7 @@ class Collection:
                             instruction['field']: object[instruction['field']]
                         })
                 output_objs.append(output_obj)
+        return output_objs
 
     def delete(self, *args, **kwargs):
         pass

@@ -21,7 +21,7 @@ class Process:
             if col.parent is db:
                 filtered_data = None
                 for instruction in query_object.needed_query_methods[::-1]:
-                    if instruction['filter'] != parser.QueryOperations.echo:
+                    if instruction['filter'] is not parser.QueryOperations.echo:
                         if filtered_data is None:
                             filtered_data = col.read(objects=col.objects, instruction=instruction)
                         else:
