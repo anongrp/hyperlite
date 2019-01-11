@@ -30,7 +30,6 @@ class Collection:
         output_objs =[]
         if not instructions:
             for object in objects:
-                print(instruction['filter'](data=instruction['data'], field=object[instruction['field']]))
                 if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
                     output_objs.append(object)
             return output_objs

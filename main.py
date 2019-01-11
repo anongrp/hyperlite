@@ -15,6 +15,7 @@ if __name__ == "__main__":
     col = collection.Collection('col-1', db)
     data = request_parser.Parser.parse(data)
     process1 = process.Process(data)
+    process1.exec()
 
     with open('test/test.json', 'r') as f:
         data = f.read()
