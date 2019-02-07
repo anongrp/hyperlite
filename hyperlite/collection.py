@@ -70,6 +70,8 @@ class Collection:
         pass
 
     def read(self, objects: list, instruction: dict = {}, instructions: list = []):
+        """     Instance method to read the Objects data from the collection.    """
+        
         output_objs =[]
         if not instructions:
             for object in objects:
