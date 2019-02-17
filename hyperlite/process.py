@@ -17,7 +17,7 @@ from .database import Databases
 from hyperql import parser
 
 
-class Process:
+class Process(object):
     """     
         This class creates an executable process for every task.    
 
@@ -105,7 +105,6 @@ class Process:
             # If the Collection object belongs to Database db
             if col.parent is db:
 
-
                 # Insert user_data as new Object in specified Collection
                 # and return object id as acknowledgement.
                 return col.insert(self.process_data.user_data)
@@ -113,17 +112,35 @@ class Process:
         # If the RequestType is Delete
         elif self.process_data.request_type == 'Delete':
 
-            # Underdevelopment
-            pass
+            # Retrieve db_name, col_name and object_id from the process_data
+            db_name, col_name, object_id = Collection.meta_separator(self.process_data.meta_data)
+
+            # get Database object and Collection object
+            # on which operation is to be performed
+            db = Databases.get_db(db_name)
+            col = Collections.get_collection(col_name)
+
+            # If the Collection object belongs to Database db
+            if col.parent is db:
+                
+                # returns True if the object is removed
+                return col.delete(object_id)
         
         # If the RequestType is Update
         elif self.process_data.request_type == 'Update':
             
-            # Underdevelopment
-            pass
+            # Retrieve db_name, col_name and object_id from the process_data
+            db_name, col_name, object_id = Collection.meta_separator(self.process_data.meta_data)
 
-        # For Error Handling as well as future updates purpose
-        else:
+            # get Database object and Collection object
+            # on which operation is to be performed
+            db = Databases.get_db(db_name)
+            col = Collections.get_collection(col_name)
 
-            # Underdevelopment
-            pass
+            # If the Collection object belongs to Database db
+            if col.parent is db:
+                
+                # returns True if the object is updated
+                return col.update(object_id)
+
+        raise Exception

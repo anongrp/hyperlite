@@ -89,11 +89,51 @@ class Collection:
                 output_objs.append(output_obj)
         return output_objs
 
-    def delete(self, *args, **kwargs):
-        pass
+    def delete(self, object_id: str) -> bool:
+        """
+            Instance method to remove object.
+
+            takes object_id as parameter.
+        """
+        if self._search(object_id) is not None:
+
+            self.indices[self._search(object_id)] = None
+            return True
+        else:
+            return False    
+
+    def _search(self, object_id: str):
+        """
+            Private Instance method to get object from object id.
+
+            returns object associated with the given object_id.
+
+        """
+        try:
+            return self.indices[object_id]
+
+        except KeyError:
+            # if object_id is not available
+            return None
 
     @classmethod
     def meta_separator(cls, meta_data: dict) -> list:
+        """
+            @classmethod to fetch meta data from dict.
+
+            if meta_data is of Read RequestType,
+            then returns list containing db_name, col_name and Query
+
+            if meta_data is of Insert RequestType,
+            then returns list containing db_name and col_name.
+
+            if meta_data is of Delete RequestType,
+            then returns list containing db_name, col_name and object_id.
+
+            if meta_data is of Update RequestType,
+            then returns list containing db_name, col_name and object_id.
+
+        """
         return [meta for meta in meta_data.values()]
 
 
