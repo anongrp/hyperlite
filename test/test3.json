@@ -1,11 +1,12 @@
 {
-    "Read": {
+    "Delete": {
         "meta": {
             "Database": "db-1",
             "Collection": "col-1",
-            "Query":"name = it, age = it, city &eq \"Indore\""
+            "Object_Id": "db-1.col-1.1"
         },
-        "data": {
+        "data":{
+
         }
     }
  }
