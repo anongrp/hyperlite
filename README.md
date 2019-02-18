@@ -13,9 +13,8 @@
 
  </h>
 
-_Hyperlite database is an event based, non blocking mechanism no sql database which is implemented in Python_
 
-Hyperlite is a NoSql realtime database that provides a simple way to store and manage complex data. In Hyperlite data is stored into objects, fields, and collections, and it is auto indexed to make it easier to find relevant information.
+Hyperlite is an event based and NoSql realtime database that provides a simple way to store and manage complex data. It is works on non blocking mechanism. In Hyperlite data is stored into objects, fields, and collections, and it is auto indexed to make it easier to find relevant information.
 It works on RIDU Operation which can be done by **HyperQl**, the standard Hyperlite database query language that make it easier to communicate with the database. Hyperlite offers excellent concurrency, high performance, and powerful language support for storage and subscriptions. It can be used in any complex and real time production systems.
 
 ## Why Hyperlite ?...
