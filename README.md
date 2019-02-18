@@ -26,6 +26,17 @@ It works on RIDU Operation which can be done by **HyperQl**, the standard Hyperl
 * Schema and Schema-Less
 * Works asynchronously
 
+## Introduction To HyperQl
+`Like a query language unlike sql language`
+HyperQl(Hyper Query Language) is a official query laguage for comunicate with database. hyperQl specialy design for Hyperlite database.
+#### Types of HyperQl
+* Selective HyperQl
+    : In this type of query user write a query for selecting the fields. its same as WHERE clause in sql
+* View HyperQl
+    : In this type of query user write a query for viewing the data. its same as SELECT in sql
+
+for more info check out Hyperql official document
+
 ### Operations
  As we know that Hyperlite works on RIDU instead of CRUD operations. RIDU mean read, insert, update and delete and one more extra operation is 'Subscriptions', it mean in hyperlite total five types of operations available for client so we can say that it works on RIDUS right! No, you can but officially we don't include it as a operation even though its a operation but its not quick operation its a long runing opertion that runs forever while client is not unsubscribe it or server is not responding or maybe crash (system not server, because hyperlite server will never ever crash). 
  for more info check out Subscriptions in official documentation
