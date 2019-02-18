@@ -1,12 +1,13 @@
 {
-    "Delete": {
+    "Update": {
         "meta": {
             "Database": "db-1",
             "Collection": "col-1",
             "Query":"city &eq \"Indore\""
         },
         "data":{
-                        
+            "salary": "120.15D",
+            "post": "CFO"
         }
     }
 }

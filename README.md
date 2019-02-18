@@ -3,8 +3,6 @@
 </p>
 
 <h align="center">
-
-
  
  [![Status](https://img.shields.io/badge/hyperlite-underdevelopment-blue.svg)](https://github.com/anongrp/hyperlite/releases)
  [![Build Status](https://travis-ci.org/anongrp/hyperlite.svg?branch=master)](https://travis-ci.org/anongrp/hyperlite)
