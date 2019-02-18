@@ -62,12 +62,63 @@ class Collection:
 
         return object_id
 
-    def update(self, *args, **kwargs):
+    def update(self, new_data: dict, update_objects: dict):
         """     Instance method to update an object of the collection.    """
 
-        # underdevelopment
+        for object in update_objects:
+            for prop in new_data:
+                if type(new_data[prop]) is dict:
+                    operator = list(new_data[prop].keys())[0]
+                    if operator == "&inc":
+                        try:
+                            object[prop] += new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] += new_data[prop][operator]
 
-        pass
+                    if operator == "&dec":
+                        try:
+                            object[prop] -= new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] -= new_data[prop][operator]
+                    
+                    if operator == "&mul":
+                        try:
+                            object[prop] *= new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] *= new_data[prop][operator]
+
+                    if operator == "&div":
+                        try:
+                            object[prop] /= new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] /= new_data[prop][operator]
+
+                    if operator == "&pow":
+                        try:
+                            object[prop] **= new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] **= new_data[prop][operator]
+                    
+                    if operator == "&floor":
+                        try:
+                            object[prop] //= new_data[prop][operator]
+                        except KeyError:
+                            object[prop] = 0
+                            object[prop] //= new_data[prop][operator]
+
+                else:
+                    object[prop] = new_data[prop]
+            # print()
+            # print()
+            # print(object)
+            # print()
+            # print()
+        return True
 
     def read(self, objects: list, instruction: dict = {}, instructions: list = []):
         """     Instance method to read the Objects data from the collection.    """
