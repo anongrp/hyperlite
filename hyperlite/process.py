@@ -36,8 +36,8 @@ class Process(object):
             It resolves the tasks on the basis of the RequestType of the ParsedData().
         """
 
-        # If the RequestType is Read
-        if self.process_data.request_type == 'Read':
+        # If the RequestType is Read or Update
+        if self.process_data.request_type == 'Read' or self.process_data.request_type == 'Update':
 
             # Retrieve db_name, col_name and HyperQL query
             # from the process_data
@@ -52,23 +52,56 @@ class Process(object):
             # Query() contains required_field and needed_query_methods
             query_object = parser.hyperql_parser(query)
 
-            echo_queries = [] # stores echo query instructions
 
             # If the Collection object belongs to Database db
             if col.parent is db:
                 
                 # The HyperQl query is parsed with bottom-up approach,
-                #   filtered_data stores the remaining data after every iteration of query parsing.
+                # filtered_data stores the remaining data after every iteration of
+                # query parsing.
                 filtered_data = None
 
-                # Iteration on needed_query_methods with bottom-up approach.
-                # instruction is a dict() object which contains field, data
-                # (on which operation is to be performed) and 
-                # required filter i.e. required method for Query Operation
-                for instruction in query_object.needed_query_methods[::-1]:
+                if self.process_data.request_type == 'Read':
+
+                    echo_queries = [] # stores echo query instructions
+
+                    # Iteration on needed_query_methods with bottom-up approach.
+                    # instruction is a dict() object which contains field, data
+                    # (on which operation is to be performed) and 
+                    # required filter i.e. required method for Query Operation
+                    for instruction in query_object.needed_query_methods[::-1]:
+                        
+                        # if the instruction doesn't contain echo Operation
+                        if instruction['filter'] is not parser.QueryOperations.echo:
+
+                            # For first iteration
+                            if filtered_data is None:
+
+                                # Store retrieved data as filtered_data
+                                filtered_data = col.read(objects=col.objects, instruction=instruction)
+
+                            # If filtered_data is not None
+                            else:
+
+                                # Replace filtered_data with new retrieved data
+                                filtered_data = col.read(objects=filtered_data, instruction=instruction)
                     
-                    # if the instruction doesn't contain echo Operation
-                    if instruction['filter'] is not parser.QueryOperations.echo:
+                        # If the instruction contains echo Operation
+                        else:
+
+                            # Store all echo Operations in echo_queries
+                            echo_queries.append(instruction)
+                
+                    # Perform all echo operations together and return required data.
+                    return col.read(objects=filtered_data, instructions=echo_queries)
+                
+                else:
+                    
+                    # Iteration on needed_query_methods.
+                    # Instruction is a dict() object which contains field, data
+                    # (on which operation is to be performed) and 
+                    # required filter i.e. required method for Query Operation
+                    for instruction in query_object.needed_query_methods:
 
                         # For first iteration
                         if filtered_data is None:
@@ -81,15 +114,8 @@ class Process(object):
 
                             # Replace filtered_data with new retrieved data
                             filtered_data = col.read(objects=filtered_data, instruction=instruction)
-                    
-                    # If the instruction contains echo Operation
-                    else:
 
-                        # Store all echo Operations in echo_queries
-                        echo_queries.append(instruction)
-                
-                # Perform all echo operations together and return required data.
-                return col.read(objects=filtered_data, instructions=echo_queries)
+                    return col.update(new_data=self.process_data.user_data, update_objects=filtered_data)
 
         # If the RequestType is Insert
         elif self.process_data.request_type == 'Insert':
@@ -126,21 +152,5 @@ class Process(object):
                 # returns True if the object is removed
                 return col.delete(object_id)
         
-        # If the RequestType is Update
-        elif self.process_data.request_type == 'Update':
-            
-            # Retrieve db_name, col_name and object_id from the process_data
-            db_name, col_name, object_id = Collection.meta_separator(self.process_data.meta_data)
-
-            # get Database object and Collection object
-            # on which operation is to be performed
-            db = Databases.get_db(db_name)
-            col = Collections.get_collection(col_name)
-
-            # If the Collection object belongs to Database db
-            if col.parent is db:
-                
-                # returns True if the object is updated
-                return col.update(object_id)
 
         raise Exception
