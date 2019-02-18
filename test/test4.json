@@ -9,7 +9,7 @@
             "salary": {
                 "&inc": 200000
             },
-            "post": "CFO"
+            "post": "CTO"
         }
     }
 }

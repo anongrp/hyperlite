@@ -9,6 +9,9 @@
             "age": 19,
             "city": "Indore",
             "email": "username@gmail.com",
+            "language": "Assembly",
+            "post": "CHEO",
+            "salary": 10000,
             "posts": {
                 "title": "hfkjhgdhgvkd",
                 "desc": "nfdkbhhkfdhvkjdhkxfd",

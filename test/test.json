@@ -3,7 +3,7 @@
         "meta": {
             "Database": "db-1",
             "Collection": "col-1",
-            "Query":"name = it, age = it, city &eq \"Indore\""
+            "Query":"name = it, age = it, post = it, city &eq \"Indore\""
         },
         "data": {
         }

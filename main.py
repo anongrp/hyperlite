@@ -33,9 +33,24 @@ if __name__ == "__main__":
     for data in output_data:
         print(data)
     
-    with open('test/test3.json', 'r') as f:
+    with open('test/test4.json', 'r') as f:
         data = f.read()
     data = request_parser.Parser.parse(data)
     process3 = process.Process(data)
     output_data = process3.exec()
+    print('Object Updated :-',output_data)
+
+    with open('test/test.json', 'r') as f:
+        data = f.read()
+    data = request_parser.Parser.parse(data)
+    process2 = process.Process(data)
+    output_data = process2.exec()
+    for data in output_data:
+        print(data)
+
+    with open('test/test3.json', 'r') as f:
+        data = f.read()
+    data = request_parser.Parser.parse(data)
+    process4 = process.Process(data)
+    output_data = process4.exec()
     print('Object deleted :-',output_data)
