@@ -3,10 +3,10 @@
         "meta": {
             "Database": "db-1",
             "Collection": "col-1",
-            "Query":"city &eq \"Indore\""
+            "Query":"language &eq \"Assembly\""
         },
         "data":{
-            "salary": "120.15D",
+            "salary": "20Milion P.A.",
             "post": "CFO"
         }
     }
