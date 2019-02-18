@@ -1,0 +1,12 @@
+{
+    "Delete": {
+        "meta": {
+            "Database": "db-1",
+            "Collection": "col-1",
+            "Query":"city &eq \"Indore\""
+        },
+        "data":{
+                        
+        }
+    }
+}
