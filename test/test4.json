@@ -6,7 +6,9 @@
             "Query":"language &eq \"Assembly\""
         },
         "data":{
-            "salary": "20Milion P.A.",
+            "salary": {
+                "&inc": 200000
+            },
             "post": "CFO"
         }
     }
