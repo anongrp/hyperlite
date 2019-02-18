@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/username/projectname.svg?branch=master)](https://travis-ci.com/username/projectname)
+
 <p align="center"> 
 <img src="https://raw.githubusercontent.com/anongrp/hyperlite/master/docs/assets/logos/Hyperlite%20logo%20500x500.png">
 </p>
