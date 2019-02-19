@@ -1,3 +1,5 @@
+import sys
+sys.path.append('..')
 from hyperlite.database import Database
 from hyperlite.collection import Collection
 from hyperlite.request_parser import Parser
