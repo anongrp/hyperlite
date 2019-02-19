@@ -17,7 +17,7 @@ def Main():
     line = 1
 
     host = '127.0.0.1'
-    port = 5000
+    port = 5004
 
     s = socket.socket()
     s.bind((host, port))
@@ -39,11 +39,13 @@ def Main():
         # queries = []
         # for testing, populating the queries list
         queries = [
-            # "db= Database('db-1')",  
-            # "col = Collection('col-1', db)",
-            # 'data = Parser.parse(data)',
-            # 'process1= Process(data)',
-            # 'process1.exec()',
+            """
+db = Database('db-1')  
+col = Collection('col-1', db)
+data = Parser.parse(data)
+process1= Process(data)
+print(process1.exec())
+""",
         ]
 
         # start an indefinite connection, (till explicitly terminated)
@@ -56,6 +58,7 @@ def Main():
             if 'execute' in client_command:
                 for code in queries:
                     print(code)
+
                     exec(code)  # this will execute the client commands
                     # empty the list after executing the code
                 queries = []

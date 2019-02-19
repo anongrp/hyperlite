@@ -113,11 +113,11 @@ class Collection:
 
                 else:
                     object[prop] = new_data[prop]
-            # print()
-            # print()
-            # print(object)
-            # print()
-            # print()
+            print()
+            print()
+            print(object)
+            print()
+            print()
         return True
 
     def read(self, objects: list, instruction: dict = {}, instructions: list = []):
