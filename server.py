@@ -22,14 +22,19 @@ class Socket(socket.socket):
                 "addr": addr
             })
             while True:
-                raw_query = client.recv(1024).decode("UTF-8")
-                if raw_query.lower() == 'exit':
-                    client.close()
-                    break
-                json_query = json.load(raw_query)
-                if json_query.type is not None and json_query.type.lower() == 'Request':
-                    Event.emmit('request', json_query)
-                # code to communicate with hyperlite engine
-
-    def on_request(self, callback):
-        Event.on("request", callback)
+                try:
+                    raw_query = str(client.recv(1024).decode("UTF-8"))
+                    if raw_query.lower() == 'exit':
+                        client.close()
+                        break
+                    json_query = json.loads(raw_query)
+                    if json_query['type'] is not None and json_query['type'] == 'Request':
+                        Event.emmit('request', json.dumps(json_query))
+                        # if self.onRequestCallback is not None:
+                        #     self.onRequestCallback(json_query)
+                    # code to communicate with hyperlite engine
+                except ConnectionResetError as err:
+                    self.clients.remove({
+                        "client": client,
+                        "addr": addr
+                    })

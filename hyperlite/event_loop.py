@@ -23,7 +23,7 @@ class EventLoop:
 class LoopRunner:
     def __init__(self):
         self.loop = EventLoop()
-        self.isRunning = self.shouldContinue()
+        self.isRunning: bool = self.shouldContinue()
         Event.on('loop-rerun', self.run)
 
     def run(self):

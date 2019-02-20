@@ -14,6 +14,10 @@ class Event:
             event: callback
         })
 
+    @staticmethod
+    def off(event: str):
+        Event.events.pop(Event.events.index(event))
+
     # Method For Executing And Passing Data To The Callbacked That Is Associated To An Certain Event
     @staticmethod
     def emmit(event: str, data=None):
@@ -23,6 +27,7 @@ class Event:
                 callback(data)
             else:
                 callback()
+
 
 
 if __name__ == '__main__':

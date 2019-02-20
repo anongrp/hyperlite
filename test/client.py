@@ -2,11 +2,12 @@ import socket
 
 def Main():
     host = '127.0.0.1'  #of server
-    port = 4444
+    port = 9898
 
     s = socket.socket()
     s.connect((host, port))
-
+    with open('test2.json', 'r') as f1:
+        s.send(f1.read().encode('utf-8'))
     message = input("-> ")
 
     while True:
