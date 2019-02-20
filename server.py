@@ -34,7 +34,4 @@ class Socket(socket.socket):
                         #     self.onRequestCallback(json_query)
                     # code to communicate with hyperlite engine
                 except ConnectionResetError as err:
-                    self.clients.remove({
-                        "client": client,
-                        "addr": addr
-                    })
+                    pass
