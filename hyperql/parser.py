@@ -60,6 +60,10 @@ class Query:
     def __init__(self):
         self.required_field = []
         self.needed_query_methods = []
+        self.modifiers = {
+            "limit": -1,
+            "skip": 0
+        }
 
 
 def hyperql_parser(query: str) -> Query:
@@ -69,15 +73,16 @@ def hyperql_parser(query: str) -> Query:
     def get_field_name(raw_query):
         if raw_query.find('=') > -1:
             return raw_query[0: raw_query.find("=")].strip()
-        else:
+        elif raw_query.find('&') > -1:
             return raw_query[0: raw_query.find("&")].strip()
 
     def get_filter(raw_query):
         if raw_query.find(' it') > -1:
             return QueryOperations.get_from_command("it")
-        else:
+        elif raw_query.find('&') > -1:
             cmd = raw_query[raw_query.find("&"): raw_query.find(" ", raw_query.find("&"))]
             return QueryOperations.get_from_command(cmd)
+
 
     def get_data(raw_query):
         return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
@@ -92,6 +97,12 @@ def hyperql_parser(query: str) -> Query:
             "data": get_data(raw_query)
         })
 
+    def parse_modifiers(raw_query):
+        if 'limit' in raw_query:
+            query_obj.modifiers['limit'] = int(raw_query[raw_query.find(':') + 1: len(raw_query)].strip())
+        if 'skip' in raw_query:
+            query_obj.modifiers['skip'] = int(raw_query[raw_query.find(':') + 1: len(raw_query)].strip())
+
     for instruction in query.strip().split(","):
         query_instructions.append(instruction.strip())
 
@@ -99,8 +110,10 @@ def hyperql_parser(query: str) -> Query:
         if raw_query.find("=") > -1:
             query_obj.required_field.append(get_field_name(raw_query))
 
-        parse_filters(raw_query)
-
+        if raw_query.find('$') > -1:
+            parse_modifiers(raw_query)
+        else:
+            parse_filters(raw_query)
     return query_obj
 
 
@@ -108,9 +121,13 @@ if __name__ == "__main__":
     query = """ 
             name = it, 
             age = it, 
-            city &eq "city_name" 
+            city &eq "city_name",
+            $skip : 5,
+            $limit : 104
             """
     obj = hyperql_parser(query)
 
     for instruction in obj.needed_query_methods:
         print(instruction)
+
+    print(obj.modifiers)

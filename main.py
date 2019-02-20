@@ -12,9 +12,10 @@ from hyperlite import request_parser
 from hyperlite import database
 from hyperlite import collection
 
-import server
+from server import Socket
 
 if __name__ == "__main__":
+    socker = Socket()
     loop_runner = event_loop.LoopRunner()
     loop_runner.run()
 

@@ -20,3 +20,8 @@ DATABASE_FORMAT = {
     'type': 'bson',
     'format': 'binary'
 }
+
+DEFAULT = {
+    "port": 9898,
+    "host": "localhost"
+}
