@@ -28,8 +28,10 @@ class LoopRunner:
 
     def run(self):
         while self.shouldContinue():
+            self.isRunning = True
             self.loop.execute_query_process()
             self.loop.execute_sys_process()
+        self.isRunning = False
 
     def shouldContinue(self) -> bool:
         return (self.loop.query_processes.__len__() != 0) or (self.loop.system_process.__len__() != 0) or (
