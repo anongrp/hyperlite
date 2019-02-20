@@ -15,7 +15,9 @@
 """
 
 from .database import Database
+from hyperql.parser import Query
 
+DEFAULT_QUERY = Query()
 
 class Collection:
     """
@@ -120,7 +122,7 @@ class Collection:
             print()
         return True
 
-    def read(self, objects: list, instruction: dict = {}, instructions: list = []):
+    def read(self, objects: list, instruction: dict={}, instructions: list=[], modifiers=None):
         """     Instance method to read the Objects data from the collection.    """
         
         output_objs =[]
@@ -128,8 +130,7 @@ class Collection:
             for object in objects:
                 if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
                     output_objs.append(object)
-            return output_objs
-        else:
+        else:            
             for object in objects:
                 output_obj = {}
                 for instruction in instructions:
@@ -138,6 +139,11 @@ class Collection:
                             instruction['field']: object[instruction['field']]
                         })
                 output_objs.append(output_obj)
+        
+        if modifiers != DEFAULT_QUERY.modifiers:
+            if modifiers is not None:
+                output_objs = output_objs[modifiers['skip']:modifiers['skip']+modifiers['limit']]            
+        
         return output_objs
 
     def delete(self, object_id: str) -> bool:

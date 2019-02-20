@@ -93,7 +93,7 @@ class Process(object):
                             echo_queries.append(instruction)
                 
                     # Perform all echo operations together and return required data.
-                    return col.read(objects=filtered_data, instructions=echo_queries)
+                    return col.read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
                 
                 else:
                     
