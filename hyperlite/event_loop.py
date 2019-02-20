@@ -1,29 +1,36 @@
 """ Event Loop The Heart Of HyperLite DB """
+from .event import Event
 
-from .process import Process
 
 class EventLoop:
     def __init__(self):
-        self.user_process: Process = []
-        self.system_process: Process = []
+        # Used for RIDU operations
+        self.query_processes = []
+        # Used for handle subscription for real time communication
+        self.subscriptions = []
+        # Used for High Intense work Like: Saved to disk, defrag the database, database encryption
+        self.system_process = []
 
     def execute_sys_process(self):
-        self.events.clear()
+        self.system_process.clear()
         pass
 
-    def execute_usr_process(self):
-        self.callbacks.clear()
+    def execute_query_process(self):
+        self.query_processes.clear()
         pass
 
 
 class LoopRunner:
     def __init__(self):
         self.loop = EventLoop()
+        self.isRunning = self.shouldContinue()
+        Event.on('loop-rerun', self.run)
 
     def run(self):
-        while(self.shouldContinue()):
-            self.loop.execute_usr_process()
+        while self.shouldContinue():
+            self.loop.execute_query_process()
             self.loop.execute_sys_process()
 
     def shouldContinue(self) -> bool:
-        return (self.loop.user_process.__len__() != 0) or (self.loop.system_process.__len__() != 0)
+        return (self.loop.query_processes.__len__() != 0) or (self.loop.system_process.__len__() != 0) or (
+                    self.loop.subscriptions.__len__() != 0)

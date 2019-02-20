@@ -1,4 +1,6 @@
-import socket, json
+import json
+import socket
+
 from hyperlite.event import Event
 
 
@@ -8,7 +10,6 @@ class Socket(socket.socket):
         self.port = port
         self.host = host
         self.clients = []
-        self._event = Event()
 
     def listen(self, **kwargs):
         super().bind((self.host, self.port))
@@ -27,11 +28,11 @@ class Socket(socket.socket):
                     break
                 json_query = json.load(raw_query)
                 if json_query.type is not None and json_query.type.lower() == 'Request':
-                    self._event.emmit('request', json_query)
+                    Event.emmit('request', json_query)
                 # code to communicate with hyperlite engine
 
     def on_request(self, callback):
-        self._event.on("request", callback)
+        Event.on("request", callback)
 
 
 if __name__ == '__main__':
