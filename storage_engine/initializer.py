@@ -13,5 +13,6 @@ def getCollections(database: Database):
         collections.append(_pickle.load(open(collection_path, 'rb')))
     return collections
 
+
 def __getPathSeparator() -> str:
     return "/" if config.PLATFORM == "Linux" else r"\\"

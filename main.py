@@ -6,21 +6,22 @@
 
 """
 
-from hyperlite import event_loop, event
+from hyperlite import event_loop
 from hyperlite import process
-from hyperlite import request_parser
+from hyperlite.request_parser import Parser
 from hyperlite import database
 from hyperlite import collection
-
+from hyperlite import config
+from hyperlite.event import Event
 from server import Socket
 
 if __name__ == "__main__":
-    socker = Socket()
+    socket = Socket(config.DEFAULT.host, config.DEFAULT.port)
+    socket.listen()
     loop_runner = event_loop.LoopRunner()
     loop_runner.run()
 
     db = database.Database('db-1')
     col = collection.Collection('col-1', db)
-    data = request_parser.Parser.parse(data)
-    process1 = process.Process(data)
-    print(process1.exec())
+
+    Event.on('request', lambda data: process.Process(Parser.parse(data)))
