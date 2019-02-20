@@ -33,8 +33,3 @@ class Socket(socket.socket):
 
     def on_request(self, callback):
         Event.on("request", callback)
-
-
-if __name__ == '__main__':
-    socket = Socket(host="localhost", port=4444)
-    socket.listen()
