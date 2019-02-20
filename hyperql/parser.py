@@ -108,7 +108,7 @@ if __name__ == "__main__":
     query = """ 
             name = it, 
             age = it, 
-            city &eq "city_name"
+            city &eq "city_name" 
             """
     obj = hyperql_parser(query)
 

@@ -19,7 +19,7 @@ def Main():
     host = '127.0.0.1'
     port = 5004
 
-    s = socket.socket()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.bind((host, port))
 
     with open('test2.json', 'r') as f1:  # taking the user's data file to store
