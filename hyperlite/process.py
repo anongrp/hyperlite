@@ -1,14 +1,4 @@
-"""   It's all about processes and tasks. 
-
-    --------------------
-    Classes :
-        
-        -----------------
-        * Process
-        -----------------
-
-    --------------------
-"""
+"""   It's all about processes and tasks. """
 
 from .request_parser import ParsedData
 from .collection import Collection

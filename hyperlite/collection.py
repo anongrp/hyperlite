@@ -212,7 +212,7 @@ class Collections:
 
 
 class Objects:
-    """    Helps to Maintain record of all Objects"""
+    """ Helps to Maintain record of all Objects """
     object_count = 0
 
     @classmethod

@@ -12,7 +12,7 @@ from hyperlite import config
 from hyperlite.event import Event
 from server import Socket
 from hyperlite.collection import Collection
-from hyperlite.process import write_process
+from hyperlite.process import process
 
 if __name__ == "__main__":
     socket = Socket(config.DEFAULT.get('host'), config.DEFAULT.get('port'))
@@ -26,11 +26,12 @@ if __name__ == "__main__":
 
     def onRequest(data):
         loop_runner.loop.query_processes.append(process.Process(Parser.parse(data)))
-        if not loop_runner.isRunning:
-            Event.emmit('loop-rerun')
+        manage_loop_status()
 
     def onCollectionChange(collection: Collection):
-        loop_runner.loop.system_process.append(write_process.rendererProcess(collection))
+        for process in process.rendererProcess(collection):
+            loop_runner.loop.system_process.append(process)
+        manage_loop_status()
 
 
     Event.on('request', onRequest)
