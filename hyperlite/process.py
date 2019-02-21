@@ -52,10 +52,9 @@ class Process(object):
             # Query() contains required_field and needed_query_methods
             query_object = parser.hyperql_parser(query)
 
-
             # If the Collection object belongs to Database db
             if col.parent is db:
-                
+
                 # The HyperQl query is parsed with bottom-up approach,
                 # filtered_data stores the remaining data after every iteration of
                 # query parsing.
@@ -63,14 +62,14 @@ class Process(object):
 
                 if self.process_data.request_type == 'Read':
 
-                    echo_queries = [] # stores echo query instructions
+                    echo_queries = []  # stores echo query instructions
 
                     # Iteration on needed_query_methods with bottom-up approach.
                     # instruction is a dict() object which contains field, data
                     # (on which operation is to be performed) and 
                     # required filter i.e. required method for Query Operation
                     for instruction in query_object.needed_query_methods[::-1]:
-                        
+
                         # if the instruction doesn't contain echo Operation
                         if instruction['filter'] is not parser.QueryOperations.echo:
 
@@ -85,18 +84,18 @@ class Process(object):
 
                                 # Replace filtered_data with new retrieved data
                                 filtered_data = col.read(objects=filtered_data, instruction=instruction)
-                    
+
                         # If the instruction contains echo Operation
                         else:
 
                             # Store all echo Operations in echo_queries
                             echo_queries.append(instruction)
-                
+
                     # Perform all echo operations together and return required data.
                     return col.read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
-                
+
                 else:
-                    
+
                     # Iteration on needed_query_methods.
                     # Instruction is a dict() object which contains field, data
                     # (on which operation is to be performed) and 
@@ -108,7 +107,7 @@ class Process(object):
 
                             # Store retrieved data as filtered_data
                             filtered_data = col.read(objects=col.objects, instruction=instruction)
-                        
+
                         # If filtered_data is not None
                         else:
 
@@ -130,11 +129,10 @@ class Process(object):
 
             # If the Collection object belongs to Database db
             if col.parent is db:
-
                 # Insert user_data as new Object in specified Collection
                 # and return object id as acknowledgement.
                 return col.insert(self.process_data.user_data)
-            
+
         # If the RequestType is Delete
         elif self.process_data.request_type == 'Delete':
 
@@ -148,9 +146,7 @@ class Process(object):
 
             # If the Collection object belongs to Database db
             if col.parent is db:
-                
                 # returns True if the object is removed
                 return col.delete(object_id)
-        
 
         raise Exception

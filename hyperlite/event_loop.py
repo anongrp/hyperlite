@@ -12,12 +12,12 @@ class EventLoop:
         self.system_process = []
 
     def execute_sys_process(self):
-        self.system_process.clear()
         pass
 
     def execute_query_process(self):
-        self.query_processes.clear()
-        pass
+        print(self.query_processes)
+        for process in self.query_processes:
+            print(process.exec())
 
 
 class LoopRunner:
