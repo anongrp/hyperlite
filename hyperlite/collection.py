@@ -19,6 +19,7 @@ from hyperql.parser import Query
 
 DEFAULT_QUERY = Query()
 
+
 class Collection:
     """
         This class refers to the Collection itself.
@@ -35,12 +36,12 @@ class Collection:
         """
         self.col_name = col_name
         self.objects = []
-        self.indices = {}        # indices is a dict object
+        self.indices = {}  # indices is a dict object
         # which stores object id as key
         # and object index as value
 
         self.parent = parent
-        Collections.add_collection(self)    # Adds the collection to existing group of col.
+        Collections.add_collection(self)  # Adds the collection to existing group of col.
 
     def __str__(self):
         """     String representation of collection.    """
@@ -53,9 +54,9 @@ class Collection:
             Takes user data as parameter.
         """
 
-        object_id = Objects.generate_id(self) # unique id for every object
+        object_id = Objects.generate_id(self)  # unique id for every object
 
-        self.objects.append(user_data) # append new object to objects list
+        self.objects.append(user_data)  # append new object to objects list
 
         # update indices dict for new object
         self.indices.update({
@@ -84,7 +85,7 @@ class Collection:
                         except KeyError:
                             object[prop] = 0
                             object[prop] -= new_data[prop][operator]
-                    
+
                     if operator == "&mul":
                         try:
                             object[prop] *= new_data[prop][operator]
@@ -105,7 +106,7 @@ class Collection:
                         except KeyError:
                             object[prop] = 0
                             object[prop] **= new_data[prop][operator]
-                    
+
                     if operator == "&floor":
                         try:
                             object[prop] //= new_data[prop][operator]
@@ -122,15 +123,15 @@ class Collection:
             print()
         return True
 
-    def read(self, objects: list, instruction: dict={}, instructions: list=[], modifiers=None):
+    def read(self, objects: list, instruction: dict = {}, instructions: list = [], modifiers=None):
         """     Instance method to read the Objects data from the collection.    """
-        
-        output_objs =[]
+
+        output_objs = []
         if not instructions:
             for object in objects:
                 if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
                     output_objs.append(object)
-        else:            
+        else:
             for object in objects:
                 output_obj = {}
                 for instruction in instructions:
@@ -139,11 +140,11 @@ class Collection:
                             instruction['field']: object[instruction['field']]
                         })
                 output_objs.append(output_obj)
-        
+
         if modifiers != DEFAULT_QUERY.modifiers:
             if modifiers is not None:
-                output_objs = output_objs[modifiers['skip']:modifiers['skip']+modifiers['limit']]            
-        
+                output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
+
         return output_objs
 
     def delete(self, object_id: str) -> bool:
@@ -157,7 +158,7 @@ class Collection:
             self.indices[self._search(object_id)] = None
             return True
         else:
-            return False    
+            return False
 
     def _search(self, object_id: str):
         """

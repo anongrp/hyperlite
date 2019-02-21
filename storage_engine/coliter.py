@@ -8,7 +8,7 @@ def writer(collection: Collection):
 
 
 def __getCollectionUri(collection: Collection) -> str:
-    return config.DATABASE_PATH + __getPathSeparator() + collection.parent.name + __getPathSeparator() + collection.name + ".bson"
+    return config.DATABASE_PATH + __getPathSeparator() + collection.parent.name + __getPathSeparator() + collection.col_name + "." + config.DATABASE_FORMAT['type']
 
 
 def __getPathSeparator() -> str:

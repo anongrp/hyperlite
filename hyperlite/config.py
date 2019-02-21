@@ -7,10 +7,10 @@ PLATFORM = "Windows" if sys.platform.lower().find("win") > -1 else "Linux"
 
 
 # *Private* Path for database if platform is windows
-_WIN_DB_PATH = r"C:\\data\\hyperlite_db"
+_WIN_DB_PATH = r"C:\\data\\hyperlite"
 
 # *Private* Path for database if platform is linux
-_LINUX_DB_PATH = r"/home/.data/hyperlite_db"
+_LINUX_DB_PATH = r"/home/.data/hyperlite"
 
 # *Public* it's used in production
 DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
