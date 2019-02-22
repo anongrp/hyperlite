@@ -1,5 +1,7 @@
 """ Event Loop The Heart Of HyperLite DB """
 from .event import Event
+from storage_engine import coliter
+
 
 
 class EventLoop:
@@ -12,12 +14,12 @@ class EventLoop:
         self.system_process = []
 
     def execute_sys_process(self):
-        pass
+        for process in self.system_process:
+            #coliter.writer(???)
 
     def execute_query_process(self):
-        print(self.query_processes)
         for process in self.query_processes:
-            print(process.exec())
+            Event.emmit("on_task_complete", process.exec())
 
 
 class LoopRunner:
