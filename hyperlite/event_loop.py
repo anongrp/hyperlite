@@ -27,12 +27,14 @@ class LoopRunner:
         Event.on('loop-rerun', self.run)
 
     def run(self):
+        print(self.shouldContinue())
         while self.shouldContinue():
+            print(self.shouldContinue())
             self.isRunning = True
             self.loop.execute_query_process()
             self.loop.execute_sys_process()
         self.isRunning = False
 
     def shouldContinue(self) -> bool:
-        return (self.loop.query_processes.__len__() != 0) or (self.loop.system_process.__len__() != 0) or (
-                    self.loop.subscriptions.__len__() != 0)
+        return (self.loop.query_processes.__len__() != 0) and (self.loop.system_process.__len__() != 0) and (
+                self.loop.subscriptions.__len__() != 0)

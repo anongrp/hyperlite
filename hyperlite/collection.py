@@ -14,6 +14,7 @@
     --------------------
 """
 
+import time
 from .database import Database
 from hyperql.parser import Query
 
@@ -29,7 +30,7 @@ class Collection:
         Every Collection is represented by an object of Collection class.
     """
 
-    def __init__(self, col_name: str, parent: Database):
+    def __init__(self, col_name: str, parent: str):
         """
             Every collection contains a name, list of objects,
             indices and parent db object.
@@ -198,17 +199,34 @@ class Collection:
 class Collections:
     """   Maintains record of all Collections   """
     collection_list = {}
+    meta_collection: Collection
 
     @classmethod
     def add_collection(cls, collection: Collection):
-        Collections.collection_list.update({
-            collection.col_name: collection
-        })
+        if Collections.collection_list.get(collection.parent) is not None:
+            Collections.collection_list.get(collection).add(collection)
+        else:
+            Collections.collection_list.update({
+                collection.parent: {collection}
+            })
 
     @classmethod
-    def get_collection(cls, col_name: str):
-        collection = Collections.collection_list.get(col_name)
-        return collection
+    def get_collection(cls, col_name: str, db_name):
+        for database in Collections.collection_list:
+            for collection in database:
+                if col_name == collection.col_name:
+                    return collection
+                else:
+                    # Fetching or create new Collection
+                    new_collection = Collection(col_name, db_name)
+                    Collections.add_collection(new_collection)
+                    Collections.meta_collection.insert({
+                        "db_name": db_name,
+                        "col_name": col_name,
+                        "time_stamp": time.time(), # its helps to find this collection on disk
+                        "user": "Anonymous"
+                    })
+                    return new_collection
 
 
 class Objects:

@@ -31,7 +31,7 @@ class EncryptionProcess(Process):
         pass
 
 
-def rendererProcess(collection: Collection):
+def renderProcess(collection: Collection):
     process = []
     if _shouldDefrag():
         process.append(DefragProcess(collection))

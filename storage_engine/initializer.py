@@ -4,6 +4,10 @@ from hyperlite import config
 from hyperlite.collection import Collection, Database
 
 
+def getCollection(path) -> Collection:
+    return _pickle.load(open(path), 'rb')
+
+
 def getCollections(database: Database):
     collections = []
     database_dir = config.DATABASE_PATH + __getPathSeparator() + database.name

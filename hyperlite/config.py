@@ -2,9 +2,13 @@
 
 import os, sys
 
+
+def __getPathSeparator() -> str:
+    return "/" if PLATFORM == "Linux" else r"\\"
+
+
 # Hold the current running platform
 PLATFORM = "Windows" if sys.platform.lower().find("win") > -1 else "Linux"
-
 
 # *Private* Path for database if platform is windows
 _WIN_DB_PATH = r"C:\\data\\hyperlite"
@@ -15,9 +19,11 @@ _LINUX_DB_PATH = r"/home/.data/hyperlite"
 # *Public* it's used in production
 DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
 
+COLLECTION_PATH = DATABASE_PATH + __getPathSeparator() + "hyperlite.col"
+
 # Database format
 DATABASE_FORMAT = {
-    'type': 'bson',
+    'type': 'col',
     'format': 'binary'
 }
 
@@ -25,3 +31,4 @@ DEFAULT = {
     "port": 9898,
     "host": "localhost"
 }
+
