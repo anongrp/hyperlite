@@ -201,6 +201,23 @@ class Collections:
     collection_list = {}
     meta_collection: Collection
 
+    """
+    {
+        database: {  // set of collection
+            collection,
+            collection,
+            collection,
+            collection
+        },
+        another_database: {  // set of collection
+            collection,
+            collection,
+            collection,
+            collection
+        },
+    }
+    """
+
     @classmethod
     def add_collection(cls, collection: Collection):
         if Collections.collection_list.get(collection.parent) is not None:

@@ -7,13 +7,6 @@
     <list default="true" id="7e99e3ab-be48-4635-abee-be218d29c9bf" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/hyperlite/collection.py" beforeDir="false" afterPath="$PROJECT_DIR$/hyperlite/collection.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hyperlite/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/hyperlite/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hyperlite/event_loop.py" beforeDir="false" afterPath="$PROJECT_DIR$/hyperlite/event_loop.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/hyperlite/process/process.py" beforeDir="false" afterPath="$PROJECT_DIR$/hyperlite/process/process.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage_engine/coliter.py" beforeDir="false" afterPath="$PROJECT_DIR$/storage_engine/coliter.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/storage_engine/initializer.py" beforeDir="false" afterPath="$PROJECT_DIR$/storage_engine/initializer.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/test/__init__.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -58,8 +51,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="426">
-              <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+            <state relative-caret-position="184">
+              <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
               <folding>
                 <element signature="e#156#165#0" expanded="true" />
               </folding>
@@ -67,22 +60,34 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/hyperlite/event.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/hyperlite/collection.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+            <state relative-caret-position="492">
+              <caret line="216" column="10" lean-forward="true" selection-start-line="216" selection-start-column="10" selection-end-line="216" selection-end-column="10" />
+              <folding>
+                <element signature="e#245#251#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/hyperlite/collection.py">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/storage_engine/coliter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="162">
-              <caret line="213" column="21" lean-forward="true" selection-start-line="213" selection-start-column="21" selection-end-line="213" selection-end-column="21" />
+            <state relative-caret-position="536">
+              <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/storage_engine/initializer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="110">
+              <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
               <folding>
-                <element signature="e#245#251#0" expanded="true" />
+                <element signature="e#0#14#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -343,7 +348,7 @@
       <workItem from="1550667380054" duration="3387000" />
       <workItem from="1550752194140" duration="2363000" />
       <workItem from="1550797128580" duration="3433000" />
-      <workItem from="1550817985202" duration="2317000" />
+      <workItem from="1550817985202" duration="2671000" />
     </task>
     <task id="LOCAL-00001" summary="add bson in configuration file">
       <created>1546669983641</created>
@@ -471,11 +476,25 @@
       <option name="project" value="LOCAL" />
       <updated>1550754527259</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="optimized">
+      <created>1550821484575</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1550821484575</updated>
+    </task>
+    <task id="LOCAL-00020" summary="optimized">
+      <created>1550821527374</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1550821527374</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="45911000" />
+    <option name="totallyTimeSpent" value="46265000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-7" y="-7" width="1550" height="848" extended-state="6" />
@@ -525,7 +544,8 @@
     <MESSAGE value="implement hyperql modifiers" />
     <MESSAGE value="server is running like a charm" />
     <MESSAGE value="adding new process module" />
-    <option name="LAST_COMMIT_MESSAGE" value="adding new process module" />
+    <MESSAGE value="optimized" />
+    <option name="LAST_COMMIT_MESSAGE" value="optimized" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$USER_HOME$/.PyCharm2018.3/system/python_stubs/-313451744/builtins.py" />
@@ -738,47 +758,44 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/storage_engine/coliter.py">
+    <entry file="file://$PROJECT_DIR$/hyperlite/event.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="536">
-          <caret line="95" lean-forward="true" selection-start-line="95" selection-end-line="98" />
-          <folding>
-            <element signature="e#1#15#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/storage_engine/initializer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="154">
-          <caret line="7" column="41" lean-forward="true" selection-start-line="7" selection-start-column="41" selection-end-line="7" selection-end-column="41" />
-          <folding>
-            <element signature="e#0#14#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="22">
+          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="426">
-          <caret line="33" lean-forward="true" selection-start-line="33" selection-end-line="33" />
+        <state relative-caret-position="184">
+          <caret line="26" lean-forward="true" selection-start-line="26" selection-end-line="26" />
           <folding>
             <element signature="e#156#165#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/hyperlite/event.py">
+    <entry file="file://$PROJECT_DIR$/storage_engine/coliter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+        <state relative-caret-position="536">
+          <caret line="98" lean-forward="true" selection-start-line="98" selection-end-line="98" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/storage_engine/initializer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="110">
+          <caret line="5" lean-forward="true" selection-start-line="5" selection-end-line="5" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/hyperlite/collection.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="162">
-          <caret line="213" column="21" lean-forward="true" selection-start-line="213" selection-start-column="21" selection-end-line="213" selection-end-column="21" />
+        <state relative-caret-position="492">
+          <caret line="216" column="10" lean-forward="true" selection-start-line="216" selection-start-column="10" selection-end-line="216" selection-end-column="10" />
           <folding>
             <element signature="e#245#251#0" expanded="true" />
           </folding>
