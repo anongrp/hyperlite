@@ -14,6 +14,7 @@ class Parser:
         data.request_type = list(raw_data.keys())[0]
         data.meta_data = raw_data[list(raw_data.keys())[0]]["meta"]
         data.user_data = raw_data[list(raw_data.keys())[0]]["data"]
+        data.addr = raw_data[list(raw_data.keys())[2]]["addr"]
         return data
 
 
@@ -23,6 +24,7 @@ class ParsedData:
         self.request_type: RequestType
         self.meta_data: dict = {}
         self.user_data: dict = {}
+        self.addr: str = None
 
     def __str__(self):
         return str(self.request_type) + str(self.meta_data) + str(self.user_data)
