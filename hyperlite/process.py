@@ -82,7 +82,8 @@ class Process(object):
 
                 # Perform all echo operations together and return required data.
                 return json.dumps({
-                    "Ack": col.read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
+                    "Ack": col.read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers),
+                    "addr": self.process_data.addr
                 })
 
             else:
@@ -106,7 +107,8 @@ class Process(object):
                         filtered_data = col.read(objects=filtered_data, instruction=instruction)
 
                 acknowledgement = json.dumps({
-                    "Ack": col.update(new_data=self.process_data.user_data, update_objects=filtered_data)
+                    "Ack": col.update(new_data=self.process_data.user_data, update_objects=filtered_data),
+                    "addr": self.process_data.addr
                 })   
                 Event.emmit('col-change', col)
                 return acknowledgement 
@@ -124,7 +126,8 @@ class Process(object):
             # Insert user_data as new Object in specified Collection
             # and return object id as acknowledgement.
             acknowledgement  = json.dumps({
-                "Ack": col.insert(self.process_data.user_data)
+                "Ack": col.insert(self.process_data.user_data),
+                "addr": self.process_data.addr
             })
 
             Event.emmit('col-change', col)
@@ -141,7 +144,8 @@ class Process(object):
             col = Collections.get_collection(col_name, db_name)
 
             acknowledgement = json.dumps({
-                "Ack": col.delete(object_id)
+                "Ack": col.delete(object_id),
+                "addr": self.process_data.addr
             })
 
             Event.emmit('col-change', col)
