@@ -14,6 +14,7 @@ class Socket(socket.socket):
     def listen(self, **kwargs):
         super().bind((self.host, self.port))
         print("Server is listening on port {}".format(self.port))
+        Event.on('on_task_complete',self.send_ack)
         while True:
             super().listen(1)
             client, addr = super().accept()
@@ -28,6 +29,7 @@ class Socket(socket.socket):
                         client.close()
                         break
                     json_query = json.loads(raw_query)
+                    json_query['addr'] = str(addr)
                     if json_query['type'] is not None and json_query['type'] == 'Request':
                         Event.emmit('request', json.dumps(json_query))
                         # if self.onRequestCallback is not None:
@@ -35,3 +37,6 @@ class Socket(socket.socket):
                     # code to communicate with hyperlite engine
                 except ConnectionResetError as err:
                     pass
+
+    def send_ack(self,ack: str):
+        pass
