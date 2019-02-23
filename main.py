@@ -7,15 +7,15 @@
 
 import os
 
-from multiprocessing import Process, Manager
+import threading
 
 from hyperlite import event_loop
-from hyperlite import process
+from hyperlite import ridu_process
 from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
 from hyperlite.collection import Collection, Collections
-from hyperlite.process import process
+from hyperlite.process.process import renderProcess
 from hyperlite import config
 
 from storage_engine import initializer
@@ -35,7 +35,7 @@ def initMe():
 
 if __name__ == "__main__":
     initMe()
-    server_process = Process(target=listenForConnection)
+    # server_process = threading.Thread(target=listenForConnection)
     loop_runner = event_loop.LoopRunner()
     loop_runner.run()
 
@@ -46,18 +46,16 @@ if __name__ == "__main__":
 
 
     def onRequest(data):
-        loop_runner.loop.query_processes.append(process.Process(Parser.parse(data)))
+        loop_runner.loop.query_processes.put(ridu_process.Process(process_data=Parser.parse(data)))
         manage_loop_status()
 
 
     def onCollectionChange(collection: Collection):
-        for proc in process.renderProcess(collection):
-            loop_runner.loop.system_process.append(proc)
+        for proc in renderProcess(collection):
+            loop_runner.loop.system_process.put(proc)
         manage_loop_status()
 
 
-    server_process.start()
     Event.on('request', onRequest)
     Event.on('col-change', onCollectionChange)
-    server_process.join()
-    print("software is free")
+    listenForConnection()

@@ -109,11 +109,11 @@ class Process(object):
                 acknowledgement = json.dumps({
                     "Ack": col.update(new_data=self.process_data.user_data, update_objects=filtered_data),
                     "addr": self.process_data.addr
-                })   
+                })
                 Event.emmit('col-change', col)
-                return acknowledgement 
+                return acknowledgement
 
-        # If the RequestType is Insert
+                # If the RequestType is Insert
         elif self.process_data.request_type == 'Insert':
 
             # Retrieve db_name, col_name from the process_data
@@ -125,15 +125,15 @@ class Process(object):
 
             # Insert user_data as new Object in specified Collection
             # and return object id as acknowledgement.
-            acknowledgement  = json.dumps({
+            acknowledgement = json.dumps({
                 "Ack": col.insert(self.process_data.user_data),
                 "addr": self.process_data.addr
             })
 
             Event.emmit('col-change', col)
-            return acknowledgement 
+            return acknowledgement
 
-        # If the RequestType is Delete
+            # If the RequestType is Delete
         elif self.process_data.request_type == 'Delete':
 
             # Retrieve db_name, col_name and object_id from the process_data

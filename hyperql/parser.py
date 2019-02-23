@@ -83,7 +83,6 @@ def hyperql_parser(query: str) -> Query:
             cmd = raw_query[raw_query.find("&"): raw_query.find(" ", raw_query.find("&"))]
             return QueryOperations.get_from_command(cmd)
 
-
     def get_data(raw_query):
         return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
             '"') > 0 else None

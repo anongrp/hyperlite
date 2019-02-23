@@ -15,7 +15,7 @@
 """
 
 import time
-from .database import Database
+from hyperlite.event import Event
 from hyperql.parser import Query
 
 DEFAULT_QUERY = Query()
@@ -46,7 +46,7 @@ class Collection:
 
     def __str__(self):
         """     String representation of collection.    """
-        return self.col_name
+        return str(self.__dict__)
 
     def insert(self, user_data: dict):
         """ 
@@ -199,7 +199,7 @@ class Collection:
 class Collections:
     """   Maintains record of all Collections   """
     collection_list = {}
-    meta_collection: Collection
+    meta_collection: Collection = None
 
     """
     {
@@ -221,7 +221,7 @@ class Collections:
     @classmethod
     def add_collection(cls, collection: Collection):
         if Collections.collection_list.get(collection.parent) is not None:
-            Collections.collection_list.get(collection).add(collection)
+            Collections.collection_list.get(collection.parent).add(collection)
         else:
             Collections.collection_list.update({
                 collection.parent: {collection}
@@ -229,7 +229,8 @@ class Collections:
 
     @classmethod
     def get_collection(cls, col_name: str, db_name):
-        for database in Collections.collection_list:
+        if Collections.collection_list.get(db_name) is not None:
+            database = Collections.collection_list.get(db_name)
             for collection in database:
                 if col_name == collection.col_name:
                     return collection
@@ -240,10 +241,22 @@ class Collections:
                     Collections.meta_collection.insert({
                         "db_name": db_name,
                         "col_name": col_name,
-                        "time_stamp": time.time(), # its helps to find this collection on disk
+                        "time_stamp": time.time(),  # its helps to find this collection on disk
                         "user": "Anonymous"
                     })
+                    Event.emmit('col-change', Collections.meta_collection)
                     return new_collection
+        else:
+            new_collection = Collection(col_name, db_name)
+            Collections.add_collection(new_collection)
+            Collections.meta_collection.insert({
+                "db_name": db_name,
+                "col_name": col_name,
+                "time_stamp": time.time(),  # its helps to find this collection on disk
+                "user": "Anonymous"
+            })
+            Event.emmit('col-change', Collections.meta_collection)
+            return new_collection
 
 
 class Objects:
@@ -252,5 +265,5 @@ class Objects:
 
     @classmethod
     def generate_id(cls, collection: Collection) -> str:
-        obj_id = collection.parent.db_name + '.' + collection.col_name + '.' + str(Objects.object_count + 1)
+        obj_id = collection.parent + '.' + collection.col_name + '.' + str(Objects.object_count + 1)
         return obj_id

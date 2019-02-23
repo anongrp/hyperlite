@@ -33,9 +33,9 @@ class EncryptionProcess(Process):
 
 def renderProcess(collection: Collection):
     process = []
-    if _shouldDefrag():
-        process.append(DefragProcess(collection))
-    process.append(EncryptionProcess(collection))
+    # if _shouldDefrag():
+    #     process.append(DefragProcess(collection))
+    # process.append(EncryptionProcess(collection))
     process.append(WriteProcess(collection))
     return process
 

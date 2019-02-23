@@ -1,25 +1,24 @@
 """ Event Loop The Heart Of HyperLite DB """
+from queue import Queue
 from .event import Event
-from storage_engine import coliter
-
 
 
 class EventLoop:
     def __init__(self):
         # Used for RIDU operations
-        self.query_processes = []
+        self.query_processes = Queue()
         # Used for handle subscription for real time communication
-        self.subscriptions = []
+        self.subscriptions = Queue()
         # Used for High Intense work Like: Saved to disk, defrag the database, database encryption
-        self.system_process = []
+        self.system_process = Queue()
 
     def execute_sys_process(self):
-        for process in self.system_process:
-            #coliter.writer(???)
+        for i in range(0, self.system_process.qsize()):
+            print("System Task Ack : " + str(self.system_process.get().exec()))
 
     def execute_query_process(self):
-        for process in self.query_processes:
-            Event.emmit("on_task_complete", process.exec())
+        for i in range(0, self.query_processes.qsize()):
+            Event.emmit("on_task_complete", self.query_processes.get().exec())
 
 
 class LoopRunner:
@@ -29,14 +28,12 @@ class LoopRunner:
         Event.on('loop-rerun', self.run)
 
     def run(self):
-        print(self.shouldContinue())
         while self.shouldContinue():
-            print(self.shouldContinue())
             self.isRunning = True
             self.loop.execute_query_process()
             self.loop.execute_sys_process()
         self.isRunning = False
 
     def shouldContinue(self) -> bool:
-        return (self.loop.query_processes.__len__() != 0) and (self.loop.system_process.__len__() != 0) and (
-                self.loop.subscriptions.__len__() != 0)
+        return (self.loop.query_processes.qsize() != 0) or (self.loop.system_process.qsize() != 0) or (
+                self.loop.subscriptions.qsize() != 0)
