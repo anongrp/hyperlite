@@ -21,7 +21,7 @@ def writer(collection: Collection):
 
 def doctor():
     if not os.path.exists(config.DATABASE_PATH):
-        os.mkdir(config.DATABASE_PATH)
+        os.makedirs(config.DATABASE_PATH)   # mkdir() for just one folder, makedirs() for creating multiple folders
 
 
 def __getNewCollectionUri() -> str:
