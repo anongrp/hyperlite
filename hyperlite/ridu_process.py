@@ -43,77 +43,25 @@ class Process(object):
             # get Query() object from HyperQL query
             # Query() contains required_field and needed_query_methods
             query_object = parser.hyperql_parser(query)
-
-            # The HyperQl query is parsed with bottom-up approach,
-            # filtered_data stores the remaining data after every iteration of
-            # query parsing.
-            filtered_data = None
-
+            
             if self.process_data.request_type == 'Read':
 
-                echo_queries = []  # stores echo query instructions
-
-                # Iteration on needed_query_methods with bottom-up approach.
-                # instruction is a dict() object which contains field, data
-                # (on which operation is to be performed) and 
-                # required filter i.e. required method for Query Operation
-                for instruction in query_object.needed_query_methods[::-1]:
-
-                    # if the instruction doesn't contain echo Operation
-                    if instruction['filter'] is not parser.QueryOperations.echo:
-
-                        # For first iteration
-                        if filtered_data is None:
-
-                            # Store retrieved data as filtered_data
-                            filtered_data = col.read(objects=col.objects, instruction=instruction)
-
-                        # If filtered_data is not None
-                        else:
-
-                            # Replace filtered_data with new retrieved data
-                            filtered_data = col.read(objects=filtered_data, instruction=instruction)
-
-                    # If the instruction contains echo Operation
-                    else:
-
-                        # Store all echo Operations in echo_queries
-                        echo_queries.append(instruction)
-
-                # Perform all echo operations together and return required data.
-                return json.dumps({
-                    "Ack": col.read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers),
+                return {
+                    "Ack": col.read(query_object),
                     "addr": self.process_data.addr
-                })
-
+                }
+            
             else:
 
-                # Iteration on needed_query_methods.
-                # Instruction is a dict() object which contains field, data
-                # (on which operation is to be performed) and 
-                # required filter i.e. required method for Query Operation
-                for instruction in query_object.needed_query_methods:
-
-                    # For first iteration
-                    if filtered_data is None:
-
-                        # Store retrieved data as filtered_data
-                        filtered_data = col.read(objects=col.objects, instruction=instruction)
-
-                    # If filtered_data is not None
-                    else:
-
-                        # Replace filtered_data with new retrieved data
-                        filtered_data = col.read(objects=filtered_data, instruction=instruction)
-
-                acknowledgement = json.dumps({
-                    "Ack": col.update(new_data=self.process_data.user_data, update_objects=filtered_data),
+                acknowledgement = {
+                    "Ack": col.update(query_object),
                     "addr": self.process_data.addr
-                })
-                Event.emmit('col-change', col)
-                return acknowledgement
+                }
 
-                # If the RequestType is Insert
+            Event.emmit('col-change', col)
+            return acknowledgement
+            
+        # If the RequestType is Insert
         elif self.process_data.request_type == 'Insert':
 
             # Retrieve db_name, col_name from the process_data
@@ -125,15 +73,15 @@ class Process(object):
 
             # Insert user_data as new Object in specified Collection
             # and return object id as acknowledgement.
-            acknowledgement = json.dumps({
+            acknowledgement = {
                 "Ack": col.insert(self.process_data.user_data),
                 "addr": self.process_data.addr
-            })
+            }
 
             Event.emmit('col-change', col)
             return acknowledgement
 
-            # If the RequestType is Delete
+        # If the RequestType is Delete
         elif self.process_data.request_type == 'Delete':
 
             # Retrieve db_name, col_name and object_id from the process_data
@@ -143,10 +91,10 @@ class Process(object):
             # on which operation is to be performed
             col = Collections.get_collection(col_name, db_name)
 
-            acknowledgement = json.dumps({
+            acknowledgement = {
                 "Ack": col.delete(object_id),
                 "addr": self.process_data.addr
-            })
+            }
 
             Event.emmit('col-change', col)
             return acknowledgement
