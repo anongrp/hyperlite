@@ -1,7 +1,5 @@
 """   It's all about processes and tasks. """
 
-import json
-
 from .request_parser import ParsedData
 from .collection import Collection
 from .collection import Collections
@@ -48,7 +46,7 @@ class Process(object):
             else:
 
                 acknowledgement = {
-                    "Ack": col.update(query_object),
+                    "Ack": col.update(query_object, self.process_data.user_data),
                     "addr": self.process_data.addr
                 }
 
@@ -58,15 +56,10 @@ class Process(object):
         # If the RequestType is Insert
         elif self.process_data.request_type == 'Insert':
 
-            # Retrieve db_name, col_name from the process_data
             db_name, col_name = Collection.meta_separator(self.process_data.meta_data)
 
-            # get Collection object
-            # on which operation is to be performed
             col = Collections.get_collection(col_name, db_name)
 
-            # Insert user_data as new Object in specified Collection
-            # and return object id as acknowledgement.
             acknowledgement = {
                 "Ack": col.insert(self.process_data.user_data),
                 "addr": self.process_data.addr
@@ -78,11 +71,8 @@ class Process(object):
         # If the RequestType is Delete
         elif self.process_data.request_type == 'Delete':
 
-            # Retrieve db_name, col_name and object_id from the process_data
             db_name, col_name, object_id = Collection.meta_separator(self.process_data.meta_data)
 
-            # get Collection object
-            # on which operation is to be performed
             col = Collections.get_collection(col_name, db_name)
 
             acknowledgement = {
