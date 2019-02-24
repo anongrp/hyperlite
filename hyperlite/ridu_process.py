@@ -32,16 +32,10 @@ class Process(object):
         # If the RequestType is Read or Update
         if self.process_data.request_type == 'Read' or self.process_data.request_type == 'Update':
 
-            # Retrieve db_name, col_name and HyperQL query
-            # from the process_data
             db_name, col_name, query = Collection.meta_separator(self.process_data.meta_data)
 
-            # get Collection object
-            # on which operation is to be performed
             col = Collections.get_collection(col_name, db_name)
 
-            # get Query() object from HyperQL query
-            # Query() contains required_field and needed_query_methods
             query_object = parser.hyperql_parser(query)
             
             if self.process_data.request_type == 'Read':
