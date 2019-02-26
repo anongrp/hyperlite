@@ -26,11 +26,13 @@ def listenForConnection():
 
 
 def initMe():
+    meta_col = None
     if os.path.exists(config.COLLECTION_PATH):
-        col = initializer.getCollection(config.COLLECTION_PATH)
-        Collections.meta_collection = col
+        meta_col = initializer.getCollection(config.COLLECTION_PATH)
+        Collections.meta_collection = meta_col
     else:
-        Collections.meta_collection = Collection("hyperlite.col", "MetaData")
+        meta_col = Collection("hyperlite.col", "MetaData")
+        Collections.meta_collection = meta_col
 
 
 if __name__ == "__main__":

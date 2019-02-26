@@ -12,7 +12,7 @@ class WriteProcess(Process):
         self.collection = collection
 
     def exec(self) -> bool:
-        return coliter.writer(self.collection)
+        return coliter.postWriter(self.collection)
 
 
 class DefragProcess(Process):

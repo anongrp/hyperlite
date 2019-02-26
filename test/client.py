@@ -1,7 +1,8 @@
 import socket
 
+
 def Main():
-    host = '127.0.0.1'  #of server
+    host = '127.0.0.1'  # of server
     port = 9898
 
     s = socket.socket()
@@ -14,11 +15,12 @@ def Main():
         s.send(message.encode('utf-8'))
         data = s.recv(1024).decode('utf-8')
         print(data)
-        print("-"*30)
+        print("-" * 30)
         if message.lower() == 'exit':
             break
         message = input("-> ")
     s.close()
+
 
 if __name__ == '__main__':
     Main()
