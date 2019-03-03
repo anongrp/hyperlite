@@ -5,7 +5,7 @@ from hyperlite.collection import Collection
 
 
 def getCollection(path) -> Collection:
-    return _pickle.load(open(path), 'rb')
+    return _pickle.load(open(path, 'rb'))
 
 #
 # def getCollections(database: Database):

@@ -10,7 +10,6 @@ import os
 import threading
 
 from hyperlite import event_loop
-from hyperlite import ridu_process
 from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
@@ -33,6 +32,7 @@ def initMe():
     else:
         meta_col = Collection("hyperlite.col", "MetaData")
         Collections.meta_collection = meta_col
+
 
 
 if __name__ == "__main__":

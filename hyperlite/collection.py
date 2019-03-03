@@ -16,9 +16,9 @@
 
 import time
 from hyperlite.event import Event
-from hyperql.parser import Query
+from hyperql import parser
 
-DEFAULT_QUERY = Query()
+DEFAULT_QUERY = parser.Query()
 
 
 class Collection:
@@ -136,11 +136,11 @@ class Collection:
 
             # For first iteration
             if filtered_data is None:
-                filtered_data = self._read(objects=col.objects, instruction=instruction)
+                filtered_data = self._read(objects=self.objects, instruction=instruction)
             # If filtered_data is not None
             else:
                 filtered_data = self._read(objects=filtered_data, instruction=instruction)
-            
+
         return self._update(new_data=new_data, update_objects=filtered_data)
 
     def updateOne(self, object_id: str, new_data: dict):
@@ -198,7 +198,7 @@ class Collection:
 
                 # For first iteration
                 if filtered_data is None:
-                    filtered_data = self._read(objects=col.objects, instruction=instruction)
+                    filtered_data = self._read(objects=self.objects, instruction=instruction)
                 # If filtered_data is not None
                 else:
                     filtered_data = self._read(objects=filtered_data, instruction=instruction)
@@ -227,9 +227,7 @@ class Collection:
     def findById(self, object_id: str):
         """
             Private Instance method to get object from object id.
-
             returns object associated with the given object_id.
-
         """
         try:
             return self.indices[object_id]
@@ -244,7 +242,7 @@ class Collection:
 
             Takes query_object as parameter and returns first encountered Hyperlite Object.
         """
-        return self.read(query_object,one_flag=True)
+        return self.read(query_object, one_flag=True)
 
     @classmethod
     def meta_separator(cls, meta_data: dict) -> list:
@@ -312,7 +310,7 @@ class Collections:
                     Collections.meta_collection.insert({
                         "db_name": db_name,
                         "col_name": col_name,
-                        "time_stamp": time.time(),  # its helps to find this collection on disk
+                        "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
                         "user": "Anonymous"
                     })
                     Event.emmit('col-change', Collections.meta_collection)
@@ -323,12 +321,15 @@ class Collections:
             Collections.meta_collection.insert({
                 "db_name": db_name,
                 "col_name": col_name,
-                "time_stamp": time.time(),  # its helps to find this collection on disk
+                "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
                 "user": "Anonymous"
             })
             Event.emmit('col-change', Collections.meta_collection)
             return new_collection
 
+
+def parserTimeStamp(time_stamp):
+    return time_stamp[0: time_stamp.find('.')]
 
 class Objects:
     """ Helps to Maintain record of all Objects """
