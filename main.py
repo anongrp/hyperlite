@@ -15,7 +15,7 @@ from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
 from hyperlite.collection import Collection, Collections
-from hyperlite.process.process import renderProcess
+from hyperlite.process.process import renderProcess, renderRIDUProcess
 from hyperlite import config
 
 from storage_engine import initializer
@@ -48,7 +48,7 @@ if __name__ == "__main__":
 
 
     def onRequest(data):
-        loop_runner.loop.query_processes.put(ridu_process.Process(process_data=Parser.parse(data)))
+        loop_runner.loop.query_processes.put(renderRIDUProcess(parsed_data=Parser.parse(data)))
         manage_loop_status()
 
 

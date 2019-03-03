@@ -3,7 +3,6 @@
 from .request_parser import ParsedData
 from .collection import Collection
 from .collection import Collections
-from .database import Databases
 from hyperql import parser
 from hyperlite.event import Event
 
@@ -38,10 +37,10 @@ class Process(object):
             
             if self.process_data.request_type == 'Read':
 
-                return {
-                    "Ack": col.read(query_object),
-                    "addr": self.process_data.addr
-                }
+                    return {
+                        "Ack": col.read(query_object),
+                        "addr": self.process_data.addr
+                    }
             
             else:
 
