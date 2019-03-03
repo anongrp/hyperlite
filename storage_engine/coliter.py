@@ -16,7 +16,13 @@ def writer(collection):
         doctor()
         if collection is list:
             for col in collection:
-                _pickle.dump(col, open(__getNewCollectionUri(), "wb"))
+                if col.col_name == config.DEFAULT_META_COLLECTION_NAME:
+                    _pickle.dump(col, open(config.COLLECTION_PATH, "wb"))
+                else:
+                    _pickle.dump(col, open(__getNewCollectionUri(), "wb"))
+        else:
+            if collection.col_name == config.DEFAULT_META_COLLECTION_NAME:
+                _pickle.dump(collection, open(config.COLLECTION_PATH, "wb"))
             else:
                 _pickle.dump(collection, open(__getNewCollectionUri(), "wb"))
         return True

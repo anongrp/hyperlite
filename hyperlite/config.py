@@ -19,7 +19,8 @@ _LINUX_DB_PATH = r"/home/.data/hyperlite"
 # *Public* it's used in production
 DATABASE_PATH = _WIN_DB_PATH if PLATFORM == "Windows" else _LINUX_DB_PATH
 
-COLLECTION_PATH = DATABASE_PATH + __getPathSeparator() + "hyperlite.col"
+DEFAULT_META_COLLECTION_NAME = "hyperlite.col"
+COLLECTION_PATH = DATABASE_PATH + __getPathSeparator() + DEFAULT_META_COLLECTION_NAME
 
 # Database format
 DATABASE_FORMAT = {
