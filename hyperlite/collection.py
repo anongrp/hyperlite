@@ -15,6 +15,7 @@
 """
 
 import time
+import uuid
 from hyperlite.event import Event
 from hyperql import parser
 from storage_engine import initializer
@@ -24,42 +25,32 @@ DEFAULT_QUERY = parser.Query()
 
 
 class Collection:
-    """
-        This class refers to the Collection itself.
-        
-        A Collection is a group of hyperlite objects ( similar to RDBMS table ).
-
-        Every Collection is represented by an object of Collection class.
-    """
 
     def __init__(self, col_name: str, parent: str):
         """
-            Every collection contains a name, list of objects,
-            indices and parent db object.
+        :param col_name: name of the collection, which is unique for in every database
+        :param parent: parent is a database name, where this collection is belong to
         """
         self.col_name = col_name
         self.objects = []
-        self.indices = {}  # indices is a dict object
-        # which stores object id as key
-        # and object index as value
-
+        self.indexes = {}
         self.parent = parent
-        Collections.add_collection(self)  # Adds the collection to existing group of col.
 
     def __str__(self):
-        """     String representation of collection.    """
         return str(self.__dict__)
 
     def insert(self, user_data: dict):
-        """ 
-            Instance method to insert new object into collection.
-            Takes user data as parameter.
+        """
+        Insert operation: One of the most important op in RIDU's Operations
+        :param user_data: it's a type of dictionary
+        :return: objectId: it's a type of string
         """
 
-        object_id = Objects.generate_id(self)  # unique id for every object
+        object_id = Objects.generate_id()  # unique id for every object
+        user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
 
-        self.indices.update({
+        self.indexes.update({
             object_id: self.objects.__len__() - 1
         })
 
@@ -174,7 +165,6 @@ class Collection:
         if modifiers != DEFAULT_QUERY.modifiers:
             if modifiers is not None:
                 output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
-
         return output_objs
 
     def read(self, query_object, one_flag=False):
@@ -212,7 +202,7 @@ class Collection:
             takes object_id as parameter.
         """
         if self.findById(object_id) is not None:
-            self.indices[self.findById(object_id)] = None
+            self.indexes[self.findById(object_id)] = None
             return True
         else:
             return False
@@ -223,7 +213,7 @@ class Collection:
             returns object associated with the given object_id.
         """
         try:
-            return self.indices[object_id]
+            return self.indexes[object_id]
 
         except KeyError:
             # if object_id is not available
@@ -231,9 +221,11 @@ class Collection:
 
     def readOne(self, query_object):
         """
-            Instance method to get first Object's data from Collection.
-            Takes query_object as parameter and returns first encountered Hyperlite Object.
+        Instance method to get first Object from Collection.
+        :param query_object: object of Query class `from hyperql.parser import Query`
+        :return: result after applying the query
         """
+
         return self.read(query_object, one_flag=True)
 
     @classmethod
@@ -315,12 +307,12 @@ class Collections:
             result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
             print(result)
             if not result:
-                print("Getting new collection no database found")
+                print("Getting new collection: @ no database found")
                 return Collections.create_new_collection(col_name, db_name)
             else:
                 result = result[0]
-                print("Getting collection from disk root else")
-                result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
+                print("Getting collection from disk: @ root else")
+                result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
                 Collections.add_collection(result)
                 return result
 
@@ -338,6 +330,6 @@ class Objects:
     object_count = 0
 
     @classmethod
-    def generate_id(cls, collection: Collection) -> str:
-        obj_id = collection.parent + '.' + collection.col_name + '.' + str(Objects.object_count + 1)
-        return obj_id
+    def generate_id(cls) -> str:
+        obj_id = uuid.uuid4()
+        return obj_id.hex
