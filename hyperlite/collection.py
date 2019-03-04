@@ -53,15 +53,12 @@ class Collection:
     def insert(self, user_data: dict):
         """ 
             Instance method to insert new object into collection.
-
             Takes user data as parameter.
         """
 
         object_id = Objects.generate_id(self)  # unique id for every object
-
         self.objects.append(user_data)  # append new object to objects list
 
-        # update indices dict for new object
         self.indices.update({
             object_id: self.objects.__len__() - 1
         })
@@ -129,7 +126,6 @@ class Collection:
     def updateAll(self, query_object, new_data):
         """
             Instance method to update Object's data of Collection.
-
             Takes query_object and new_data: dict as parameter and returns bool value.
         """
         filtered_data = None
@@ -148,7 +144,6 @@ class Collection:
     def updateOne(self, object_id: str, new_data: dict):
         """
             Instance method to update a single Object data of Collection.
-
             Takes object_id and new_data: dict as parameter and returns bool value.
         """
         update_obj = self.findById(object_id)
@@ -197,11 +192,9 @@ class Collection:
 
         for instruction in query_object.needed_query_methods[::-1]:
             if instruction['filter'] is not parser.QueryOperations.echo:
-
                 # For first iteration
                 if filtered_data is None:
                     filtered_data = self._read(objects=self.objects, instruction=instruction)
-                # If filtered_data is not None
                 else:
                     filtered_data = self._read(objects=filtered_data, instruction=instruction)
             else:
@@ -209,7 +202,6 @@ class Collection:
 
         if one_flag is True:
             return self._read(objects=[filtered_data[0]], instructions=echo_queries, modifiers=query_object.modifiers)
-
         # Perform all echo operations together and return required data.
         return self._read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
 
@@ -220,7 +212,6 @@ class Collection:
             takes object_id as parameter.
         """
         if self.findById(object_id) is not None:
-
             self.indices[self.findById(object_id)] = None
             return True
         else:
@@ -241,7 +232,6 @@ class Collection:
     def readOne(self, query_object):
         """
             Instance method to get first Object's data from Collection.
-
             Takes query_object as parameter and returns first encountered Hyperlite Object.
         """
         return self.read(query_object, one_flag=True)
@@ -251,18 +241,10 @@ class Collection:
         """
             @classmethod to fetch meta data from dict.
 
-            if meta_data is of Read RequestType,
-            then returns list containing db_name, col_name and Query
-
-            if meta_data is of Insert RequestType,
-            then returns list containing db_name and col_name.
-
-            if meta_data is of Delete RequestType,
-            then returns list containing db_name, col_name and object_id.
-
-            if meta_data is of Update RequestType,
-            then returns list containing db_name, col_name and object_id.
-
+            if meta_data is of Read RequestType, then returns list containing db_name, col_name and Query
+            if meta_data is of Insert RequestType, then returns list containing db_name and col_name.
+            if meta_data is of Delete RequestType, then returns list containing db_name, col_name and object_id.
+            if meta_data is of Update RequestType, then returns list containing db_name, col_name and object_id.
         """
         return [meta for meta in meta_data.values()]
 

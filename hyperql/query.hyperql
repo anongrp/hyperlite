@@ -1,0 +1,13 @@
+
+# Selective Query
+field &operation "value",
+
+# View Query
+field = it, # Without filter
+field = "value" # With filter
+
+# Modifiers
+$limit = value, # To limit the result of documents
+$skip = value, # To skip some of the document from starting result
+$sort = field # To sort the result in ascending order
+$sort = -field # To sort the result in descending order
