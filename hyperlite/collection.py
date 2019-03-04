@@ -45,8 +45,9 @@ class Collection:
         :param user_data: it's a type of dictionary
         :return: objectId: it's a type of string
         """
-
+        print("User data to insert : ", end=str(user_data))
         object_id = Objects.generate_id()  # unique id for every object
+        print("Object id : ", end=object_id)
         user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
 
@@ -282,6 +283,7 @@ class Collections:
                 return result_col
             else:
                 # Fetching or create new Collection
+                print("Fetching or create new Collection")
                 query = """
                         time_stamp = it,
                         db_name &eq "{}",
@@ -305,7 +307,6 @@ class Collections:
                     col_name &eq "{}"
                     """.format(db_name, col_name)
             result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
-            print(result)
             if not result:
                 print("Getting new collection: @ no database found")
                 return Collections.create_new_collection(col_name, db_name)
@@ -332,4 +333,4 @@ class Objects:
     @classmethod
     def generate_id(cls) -> str:
         obj_id = uuid.uuid4()
-        return obj_id.hex
+        return str(obj_id.hex)

@@ -12,22 +12,6 @@ class Process(object):
 class BaseRIDUProcess(Process):
     @staticmethod
     def meta_separator(meta_data: dict) -> list:
-        """
-            @classmethod to fetch meta data from dict.
-
-            if meta_data is of Read RequestType,
-            then returns list containing db_name, col_name and Query
-
-            if meta_data is of Insert RequestType,
-            then returns list containing db_name and col_name.
-
-            if meta_data is of Delete RequestType,
-            then returns list containing db_name, col_name and object_id.
-
-            if meta_data is of Update RequestType,
-            then returns list containing db_name, col_name and object_id.
-
-        """
         return [meta for meta in meta_data.values()]
 
 
