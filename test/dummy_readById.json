@@ -1,12 +1,9 @@
 {
-    "Delete": {
+    "ReadById": {
         "meta": {
             "Database": "db-1",
             "Collection": "col-1",
             "Object_Id": "db-1.col-1.1"
-        },
-        "data":{
-
         }
     }
  }

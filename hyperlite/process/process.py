@@ -101,6 +101,47 @@ class DeleteProcess(Process):
         Event.emmit('col-change', col)
         return acknowledgement
 
+class ReadOneProcess(Process):
+    def __init__(self, parsed_data):
+        self.data = parsed_data
+
+    def exec(self):
+        db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
+        col = Collections.get_collection(col_name, db_name)
+        query_object = parser.hyperql_parser(query)
+        return {
+            "Ack": col.readOne(query_object),
+            "addr": self.data.addr
+        }
+
+
+class UpdateOneProcess(Process):
+    def __init__(self, parsed_data):
+        self.data = parsed_data
+
+    def exec(self):
+        db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
+        col = Collections.get_collection(col_name, db_name)
+        acknowledgement = {
+            "Ack": col.updateOne(object_id, self.data.user_data),
+            "addr": self.data.addr
+        }
+
+        Event.emmit('col-change', col)
+        return acknowledgement
+
+
+class ReadByIdProcess(Process):
+    def __init__(self, parsed_data):
+        self.data = parsed_data
+
+    def exec(self):
+        db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
+        col = Collections.get_collection(col_name, db_name)
+        acknowledgement = {
+            "Ack": col.findById(object_id),
+            "addr": self.data.addr
+        }
 
 def renderRIDUProcess(parsed_data):
     if parsed_data.request_type == 'Read':
@@ -111,6 +152,12 @@ def renderRIDUProcess(parsed_data):
         return InsertProcess(parsed_data)
     elif parsed_data.request_type == 'Delete':
         return DeleteProcess(parsed_data)
+    elif parsed_data.request_type == 'ReadById':
+        return ReadByIdProcess(parsed_data)
+    elif parsed_data.request_type == 'ReadOne':
+        return ReadOneProcess(parsed_data)        
+    elif parsed_data.request_type == 'UpdateOne':
+        return UpdateOneProcess(parsed_data)
     else:
         return None
 
