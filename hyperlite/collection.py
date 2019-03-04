@@ -45,9 +45,7 @@ class Collection:
         :param user_data: it's a type of dictionary
         :return: objectId: it's a type of string
         """
-        print("User data to insert : ", end=str(user_data))
         object_id = Objects.generate_id()  # unique id for every object
-        print("Object id : ", end=object_id)
         user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
 
@@ -291,7 +289,6 @@ class Collections:
                         col_name &eq "{}"
                         """.format(db_name, col_name)
                 result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
-                print(result)
                 if not result:
                     print("Getting new collection because collection is not in ram and also on a disk")
                     return Collections.create_new_collection(col_name, db_name)
