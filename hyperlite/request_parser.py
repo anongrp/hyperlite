@@ -13,7 +13,10 @@ class Parser:
         data = ParsedData()
         data.request_type = list(raw_data.keys())[0]
         data.meta_data = raw_data[list(raw_data.keys())[0]]["meta"]
-        data.user_data = raw_data[list(raw_data.keys())[0]]["data"]
+        try:
+            data.user_data = raw_data[list(raw_data.keys())[0]]["data"]
+        except:
+            pass
         data.addr = raw_data["addr"]
         return data
 
