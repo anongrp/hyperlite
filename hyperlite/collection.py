@@ -307,11 +307,11 @@ class Collections:
                     """.format(db_name, col_name)
             result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
             if not result:
-                print("Getting new collection: @ no database found")
+                print("Getting new collection: @no database found")
                 return Collections.create_new_collection(col_name, db_name)
             else:
                 result = result[0]
-                print("Getting collection from disk: @ root else")
+                print("Getting collection from disk: @root else")
                 result = initializer.getCollection(
                     config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
                 Collections.add_collection(result)

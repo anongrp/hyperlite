@@ -34,7 +34,6 @@ def initMe():
         Collections.meta_collection = meta_col
 
 
-
 if __name__ == "__main__":
     initMe()
     # server_process = threading.Thread(target=listenForConnection)
