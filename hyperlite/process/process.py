@@ -101,6 +101,7 @@ class DeleteProcess(Process):
         Event.emmit('col-change', col)
         return acknowledgement
 
+
 class ReadOneProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
@@ -142,6 +143,9 @@ class ReadByIdProcess(Process):
             "Ack": col.findById(object_id),
             "addr": self.data.addr
         }
+        return acknowledgement
+
+
 
 def renderRIDUProcess(parsed_data):
     if parsed_data.request_type == 'Read':
@@ -155,7 +159,7 @@ def renderRIDUProcess(parsed_data):
     elif parsed_data.request_type == 'ReadById':
         return ReadByIdProcess(parsed_data)
     elif parsed_data.request_type == 'ReadOne':
-        return ReadOneProcess(parsed_data)        
+        return ReadOneProcess(parsed_data)
     elif parsed_data.request_type == 'UpdateOne':
         return UpdateOneProcess(parsed_data)
     else:
