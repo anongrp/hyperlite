@@ -43,5 +43,5 @@ class Socket(socket.socket):
         print("Query Task ack: ", ack)
         for client in self.clients:
             if str(client["addr"]) == ack["addr"]:
-                print("Ack sends to client")
+                print("Ack has send to client")
                 client["client"].send(json.dumps(ack["Ack"]).encode("UTF-8"))

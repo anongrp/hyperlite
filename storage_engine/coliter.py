@@ -25,7 +25,6 @@ def writer(collection):
             if collection.col_name == config.DEFAULT_META_COLLECTION_NAME:
                 _pickle.dump(collection, open(config.COLLECTION_PATH, "wb"))
             else:
-                print(__getNewCollectionUri(collection))
                 _pickle.dump(collection, open(__getNewCollectionUri(collection), "wb"))
         return True
     except Exception as ex:

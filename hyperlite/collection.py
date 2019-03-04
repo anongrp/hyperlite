@@ -17,6 +17,8 @@
 import time
 from hyperlite.event import Event
 from hyperql import parser
+from storage_engine import initializer
+from hyperlite import config
 
 DEFAULT_QUERY = parser.Query()
 
@@ -156,7 +158,7 @@ class Collection:
         else:
             return False
 
-    def _read(self, objects: list, instruction: dict = {}, instructions: list = [], modifiers=None):
+    def _read(self, objects: list, instruction={}, instructions=[], modifiers=None):
         """     Private method to read the Objects data from the collection.    """
 
         output_objs = []
@@ -270,22 +272,18 @@ class Collections:
     collection_list = {}
     meta_collection: Collection = None
 
-    """
-    {
-        database: {  // set of collection
-            collection,
-            collection,
-            collection,
-            collection
-        },
-        another_database: {  // set of collection
-            collection,
-            collection,
-            collection,
-            collection
-        },
-    }
-    """
+    @classmethod
+    def create_new_collection(cls, col_name, db_name):
+        new_collection = Collection(col_name, db_name)
+        Collections.add_collection(new_collection)
+        Collections.meta_collection.insert({
+            "db_name": db_name,
+            "col_name": col_name,
+            "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
+            "user": "Anonymous"
+        })
+        Event.emmit('col-change', Collections.meta_collection)
+        return new_collection
 
     @classmethod
     def add_collection(cls, collection: Collection):
@@ -300,36 +298,58 @@ class Collections:
     def get_collection(cls, col_name: str, db_name):
         if Collections.collection_list.get(db_name) is not None:
             database = Collections.collection_list.get(db_name)
+            result_col = None
             for collection in database:
                 if col_name == collection.col_name:
-                    return collection
+                    result_col = collection
+                    break
+            if result_col is not None:
+                print("Getting collection from ram")
+                return result_col
+            else:
+                # Fetching or create new Collection
+                query = """
+                        time_stamp = it,
+                        db_name &eq "{}",
+                        col_name &eq "{}"
+                        """.format(db_name, col_name)
+                result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
+                print(result)
+                if not result:
+                    print("Getting new collection because collection is not in ram and also on a disk")
+                    return Collections.create_new_collection(col_name, db_name)
                 else:
-                    # Fetching or create new Collection
-                    new_collection = Collection(col_name, db_name)
-                    Collections.add_collection(new_collection)
-                    Collections.meta_collection.insert({
-                        "db_name": db_name,
-                        "col_name": col_name,
-                        "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
-                        "user": "Anonymous"
-                    })
-                    Event.emmit('col-change', Collections.meta_collection)
-                    return new_collection
+                    result = result[0]
+                    print("Getting collection from disk")
+                    result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
+                    Collections.add_collection(result)
+                    return result
         else:
-            new_collection = Collection(col_name, db_name)
-            Collections.add_collection(new_collection)
-            Collections.meta_collection.insert({
-                "db_name": db_name,
-                "col_name": col_name,
-                "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
-                "user": "Anonymous"
-            })
-            Event.emmit('col-change', Collections.meta_collection)
-            return new_collection
+            query = """
+                    time_stamp = it,
+                    db_name &eq "{}",
+                    col_name &eq "{}"
+                    """.format(db_name, col_name)
+            result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
+            print(result)
+            if not result:
+                print("Getting new collection no database found")
+                return Collections.create_new_collection(col_name, db_name)
+            else:
+                result = result[0]
+                print("Getting collection from disk root else")
+                result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
+                Collections.add_collection(result)
+                return result
 
 
 def parserTimeStamp(time_stamp):
     return time_stamp[0: time_stamp.find('.')]
+
+
+def getPathSeparator() -> str:
+    return "/" if config.PLATFORM == "Linux" else r"\\"
+
 
 class Objects:
     """ Helps to Maintain record of all Objects """

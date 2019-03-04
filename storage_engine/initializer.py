@@ -1,10 +1,9 @@
 import _pickle
 import os
 from hyperlite import config
-from hyperlite.collection import Collection
 
 
-def getCollection(path) -> Collection:
+def getCollection(path):
     return _pickle.load(open(path, 'rb'))
 
 #
@@ -16,7 +15,3 @@ def getCollection(path) -> Collection:
 #         collection_path = os.path.join(database_dir, collection_file)
 #         collections.append(_pickle.load(open(collection_path, 'rb')))
 #     return collections
-
-
-def __getPathSeparator() -> str:
-    return "/" if config.PLATFORM == "Linux" else r"\\"
