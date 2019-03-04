@@ -171,9 +171,7 @@ class Collection:
     def read(self, query_object, one_flag=False):
         """
             Instance method to get Object's data from Collection.
-
             Takes query_object as parameter and returns a list of Hyperlite Objects.
-
             The HyperQl query is parsed with bottom-up approach,
             filtered_data stores the remaining data after every iteration of
             query parsing.
@@ -192,7 +190,10 @@ class Collection:
                 echo_queries.append(instruction)
 
         if one_flag is True:
-            return self._read(objects=[filtered_data[0]], instructions=echo_queries, modifiers=query_object.modifiers)
+            if not filtered_data:
+                return filtered_data
+            else:
+                return self._read(objects=[filtered_data[0]], instructions=echo_queries, modifiers=query_object.modifiers)
         # Perform all echo operations together and return required data.
         return self._read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
 
@@ -297,7 +298,8 @@ class Collections:
                 else:
                     result = result[0]
                     print("Getting collection from disk")
-                    result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
+                    result = initializer.getCollection(
+                        config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
                     Collections.add_collection(result)
                     return result
         else:
@@ -313,7 +315,8 @@ class Collections:
             else:
                 result = result[0]
                 print("Getting collection from disk: @ root else")
-                result = initializer.getCollection(config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
+                result = initializer.getCollection(
+                    config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
                 Collections.add_collection(result)
                 return result
 
