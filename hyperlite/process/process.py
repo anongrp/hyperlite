@@ -146,7 +146,6 @@ class ReadByIdProcess(Process):
         return acknowledgement
 
 
-
 def renderRIDUProcess(parsed_data):
     if parsed_data.request_type == 'Read':
         return ReadProcess(parsed_data)

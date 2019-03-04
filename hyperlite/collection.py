@@ -212,7 +212,7 @@ class Collection:
             returns object associated with the given object_id.
         """
         try:
-            return self.indexes[object_id]
+            return self.objects[self.indexes[object_id]]
 
         except KeyError:
             # if object_id is not available
