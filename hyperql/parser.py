@@ -101,6 +101,8 @@ def hyperql_parser(query: str) -> Query:
             query_obj.modifiers['limit'] = int(raw_query[raw_query.find(':') + 1: len(raw_query)].strip())
         if 'skip' in raw_query:
             query_obj.modifiers['skip'] = int(raw_query[raw_query.find(':') + 1: len(raw_query)].strip())
+        if 'sort' in raw_query:
+            query_obj.modifiers['sort'] = raw_query[raw_query.find(':') + 1: len(raw_query)].strip()
 
     for instruction in query.strip().split(","):
         query_instructions.append(instruction.strip())
@@ -122,7 +124,8 @@ if __name__ == "__main__":
             age = it, 
             city &eq "city_name",
             $skip : 5,
-            $limit : 104
+            $limit : 104,
+            $sort : -name
             """
     obj = hyperql_parser(query)
 
