@@ -86,7 +86,7 @@ class UpdateProcess(Process):
         return acknowledgement
 
 
-class DeleleProcess(Process):
+class DeleteProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
 
@@ -110,7 +110,7 @@ def renderRIDUProcess(parsed_data):
     elif parsed_data.request_type == 'Insert':
         return InsertProcess(parsed_data)
     elif parsed_data.request_type == 'Delete':
-        return DeleleProcess(parsed_data)
+        return DeleteProcess(parsed_data)
     else:
         return None
 

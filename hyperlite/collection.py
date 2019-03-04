@@ -198,7 +198,6 @@ class Collection:
     def delete(self, object_id: str) -> bool:
         """
             Instance method to remove object.
-
             takes object_id as parameter.
         """
         if self.findById(object_id) is not None:
