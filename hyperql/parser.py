@@ -39,10 +39,6 @@ class QueryOperations:
         return not field
 
     @staticmethod
-    def echo(field):
-        return field
-
-    @staticmethod
     def get_from_command(cmd):
         operations = {
             "&eq": QueryOperations.equal_to,
@@ -50,8 +46,7 @@ class QueryOperations:
             "&gt": QueryOperations.greater_than,
             "&lt": QueryOperations.less_than,
             "&gte": QueryOperations.greater_than_equal,
-            "&lte": QueryOperations.less_than_equal,
-            "it": QueryOperations.echo
+            "&lte": QueryOperations.less_than_equal
         }
         return operations.get(cmd)
 
@@ -75,13 +70,15 @@ def hyperql_parser(query: str) -> Query:
             return raw_query[0: raw_query.find("=")].strip()
         elif raw_query.find('&') > -1:
             return raw_query[0: raw_query.find("&")].strip()
+        else:
+            return raw_query if raw_query.find(' ') == -1 else None
 
     def get_filter(raw_query):
-        if raw_query.find(' it') > -1:
-            return QueryOperations.get_from_command("it")
-        elif raw_query.find('&') > -1:
+        if raw_query.find('&') > -1:
             cmd = raw_query[raw_query.find("&"): raw_query.find(" ", raw_query.find("&"))]
             return QueryOperations.get_from_command(cmd)
+        else:
+            return None
 
     def get_data(raw_query):
         return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
@@ -108,11 +105,12 @@ def hyperql_parser(query: str) -> Query:
         query_instructions.append(instruction.strip())
 
     for raw_query in query_instructions:
-        if raw_query.find("=") > -1:
+        if raw_query.find("=") > -1 or raw_query.find(' ') == -1:
             query_obj.required_field.append(get_field_name(raw_query))
-
         if raw_query.find('$') > -1:
             parse_modifiers(raw_query)
+        elif raw_query.find('&') > -1:
+            parse_filters(raw_query)
         else:
             parse_filters(raw_query)
     return query_obj
@@ -120,8 +118,8 @@ def hyperql_parser(query: str) -> Query:
 
 if __name__ == "__main__":
     query = """ 
-            name = it, 
-            age = it, 
+            name, age, 
+            email = "username@domain.com", 
             city &eq "city_name",
             $skip : 5,
             $limit : 104,
@@ -129,6 +127,8 @@ if __name__ == "__main__":
             """
     obj = hyperql_parser(query)
 
+    for instruction in obj.required_field:
+        print(instruction)
     for instruction in obj.needed_query_methods:
         print(instruction)
 
