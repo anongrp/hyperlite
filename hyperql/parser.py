@@ -66,9 +66,7 @@ def hyperql_parser(query: str) -> Query:
     query_instructions = []
 
     def get_field_name(raw_query):
-        if raw_query.find('=') > -1:
-            return raw_query[0: raw_query.find("=")].strip()
-        elif raw_query.find('&') > -1:
+        if raw_query.find('&') > -1:
             return raw_query[0: raw_query.find("&")].strip()
         else:
             return raw_query if raw_query.find(' ') == -1 else None
@@ -81,8 +79,12 @@ def hyperql_parser(query: str) -> Query:
             return None
 
     def get_data(raw_query):
-        return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
-            '"') > 0 else None
+        raw_data = (raw_query[raw_query.find(' ', raw_query.find(' ') + 1) + 1: len(raw_query)])
+        if raw_data.find('"') > -1:
+            return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
+                '"') > 0 else None
+        else:
+            return int(raw_data)
 
     def parse_filters(raw_query):
         field = get_field_name(raw_query)
@@ -105,30 +107,33 @@ def hyperql_parser(query: str) -> Query:
         query_instructions.append(instruction.strip())
 
     for raw_query in query_instructions:
-        if raw_query.find("=") > -1 or raw_query.find(' ') == -1:
-            query_obj.required_field.append(get_field_name(raw_query))
+        if raw_query.find(' ') == -1:
+            field_name = get_field_name(raw_query)
+            if field_name == '*':
+                query_obj.required_field = field_name
+            else:
+                query_obj.required_field.append(field_name) if type(query_obj.required_field) is list else '*'
         if raw_query.find('$') > -1:
             parse_modifiers(raw_query)
         elif raw_query.find('&') > -1:
             parse_filters(raw_query)
-        else:
-            parse_filters(raw_query)
+
     return query_obj
 
 
 if __name__ == "__main__":
     query = """ 
-            name, age, 
-            email = "username@domain.com", 
+            *,
+            email &eq "username@domain.com", 
             city &eq "city_name",
+            age &gt 18,
             $skip : 5,
             $limit : 104,
             $sort : -name
             """
     obj = hyperql_parser(query)
 
-    for instruction in obj.required_field:
-        print(instruction)
+    print(obj.required_field)
     for instruction in obj.needed_query_methods:
         print(instruction)
 
