@@ -1,0 +1,5 @@
+# Constants for Request Types
+TYPE_REQUEST = 0
+TYPE_SUBSCRIPTION = 1
+TYPE_LIST_DB = 2
+TYPE_LIST_COL = 3

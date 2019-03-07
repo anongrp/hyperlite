@@ -51,6 +51,11 @@ if __name__ == "__main__":
         manage_loop_status()
 
 
+    def onSubscription(data):
+        # TODO: Adding subscription plan
+        loop_runner.loop.subscriptions.put()
+
+
     def onCollectionChange(collection: Collection):
         for proc in renderProcess(collection):
             loop_runner.loop.system_process.put(proc)
@@ -59,4 +64,5 @@ if __name__ == "__main__":
 
     Event.on('request', onRequest)
     Event.on('col-change', onCollectionChange)
+    Event.on('req_sub', onSubscription)
     listenForConnection()

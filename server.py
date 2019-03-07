@@ -1,6 +1,7 @@
 import json
 import socket
 
+from const import *
 from hyperlite.event import Event
 
 
@@ -32,8 +33,9 @@ class Socket(socket.socket):
                     json_query['addr'] = str(addr)
                     if json_query['type'] is not None and json_query['type'] == 'Request':
                         Event.emmit('request', json.dumps(json_query))
-                        # if self.onRequestCallback is not None:
-                        #     self.onRequestCallback(json_query)
+                    elif json_query['type'] is not None and json_query['type'] == 'Subscription':
+                        Event.emmit('req_sub', json.dumps(json_query))
+
                     # code to communicate with hyperlite engine
                 except Exception as err:
                     client.close()
