@@ -299,11 +299,11 @@ class Collections:
                     Collections.add_collection(result)
                     return result
         else:
-            query = """
+            query = f"""
                     time_stamp = it,
-                    db_name &eq "{}",
-                    col_name &eq "{}"
-                    """.format(db_name, col_name)
+                    db_name &eq "{db_name}",
+                    col_name &eq "{col_name}"
+                    """
             result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
             if not result:
                 print("Getting new collection: @no database found")

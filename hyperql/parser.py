@@ -1,4 +1,4 @@
-""" Parser module help to parse hyperql query language to an plan python object """
+""" Parser module help to parse hyperQl query language to an plan python object """
 
 
 class QueryOperations:
@@ -31,30 +31,72 @@ class QueryOperations:
 
     @staticmethod
     def greater_than(data, field):
-        return data < field
-
-    @staticmethod
-    def less_than(data, field):
+        """
+        just for not equal (">") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after greater than check
+        """
         return data > field
 
     @staticmethod
-    def greater_than_equal(data, field):
-        return data <= field
+    def less_than(data, field):
+        """
+        just for not equal ("<") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after less than check
+        """
+        return data < field
 
     @staticmethod
-    def less_than_equal(data, field):
+    def greater_than_equal(data, field):
+        """
+        just for not equal (">=") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after greater than equal check
+        """
         return data >= field
 
     @staticmethod
+    def less_than_equal(data, field):
+        """
+        just for not equal ("<=") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after less than equal check
+        """
+        return data <= field
+
+    @staticmethod
     def and_operation(data, field):
+        """
+        just for not equal ("&") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after and operation
+        """
         return data and field
 
     @staticmethod
     def or_operation(data, field):
+        """
+        just for not equal ("|") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after or operation
+        """
         return data or field
 
     @staticmethod
     def not_operation(field):
+        """
+        just for not equal ("!") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after not operation
+        """
         return not field
 
     @staticmethod
@@ -126,6 +168,10 @@ def parser(query: str) -> Query:
             return raw_query[raw_query.find('"') + 1: raw_query.find('"', raw_query.find('"') + 1)] if raw_query.find(
                 '"') > 0 else None
         else:
+            if raw_data.lower() == 'true':
+                return True
+            elif raw_data.lower() == 'false':
+                return False
             return int(raw_data)
 
     def parse_filters(raw_query):
@@ -156,7 +202,10 @@ def parser(query: str) -> Query:
             query_obj.modifiers['sort'] = raw_query[raw_query.find(':') + 1: len(raw_query)].strip()
 
     # Main Entry point of parser method with just O(N) Time Complexity
-    for raw_query in query.strip().split(","):
+    instructions = query.strip().split(",")
+    if instructions[len(instructions) - 1] == '':
+        instructions.pop()
+    for raw_query in instructions:
         raw_query = raw_query.strip()
         if raw_query.find(' ') == -1:
             field_name = get_field_name(raw_query)
@@ -174,16 +223,16 @@ def parser(query: str) -> Query:
 
 if __name__ == "__main__":
     query = """ 
-            *,
+            addr.city,
             email &eq "username@domain.com", 
             city &eq "city_name",
             age &gt 18,
+            isBlocked &eq False,
             $skip : 5,
             $limit : 104,
-            $sort : -name,
+            $sort : -name
             """
     obj = parser(query)
-
     print(obj.view)
     for instruction in obj.selective:
         print(instruction)
