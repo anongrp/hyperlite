@@ -3,8 +3,8 @@
 field &operation "value",
 
 # View Query
-field = it, # Without filter
-field = "value" # With filter
+field1, field2, field3 #Select this fields
+* #Select all fields
 
 # Modifiers
 $limit = value, # To limit the result of documents

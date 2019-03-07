@@ -46,11 +46,11 @@ def __generateColFileName() -> str:
 
 
 def __getCollectionNameForDisk(collection: Collection) -> str:
-    query = """ 
+    query = f""" 
             time_stamp = it,
-            db_name &eq "{}", 
-            col_name &eq "{}"
-            """.format(collection.parent, collection.col_name)
+            db_name &eq "{collection.parent}", 
+            col_name &eq "{collection.col_name}"
+            """
     data = Collections.meta_collection.readOne(parser.hyperql_parser(query))[0]
     return str(data.get("time_stamp"))
 

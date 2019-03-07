@@ -282,11 +282,11 @@ class Collections:
             else:
                 # Fetching or create new Collection
                 print("Fetching or create new Collection")
-                query = """
+                query = f"""
                         time_stamp = it,
-                        db_name &eq "{}",
-                        col_name &eq "{}"
-                        """.format(db_name, col_name)
+                        db_name &eq "{db_name}",
+                        col_name &eq "{col_name}"
+                        """
                 result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
                 if not result:
                     print("Getting new collection because collection is not in ram and also on a disk")
