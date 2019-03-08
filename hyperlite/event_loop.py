@@ -42,5 +42,7 @@ class LoopRunner:
         self.isRunning = False
 
     def shouldContinue(self) -> bool:
+        Log.d(TAG, f"Total query processes {self.loop.query_processes.qsize()}")
+        Log.d(TAG, f"Total system processes {self.loop.system_process.qsize()}")
         return (self.loop.query_processes.qsize() != 0) or (self.loop.system_process.qsize() != 0) or (
                 self.loop.subscriptions.qsize() != 0)
