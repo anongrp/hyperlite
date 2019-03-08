@@ -1,6 +1,7 @@
 """ Contain All The Configurations & Settings """
 
-import sys, getpass
+import getpass
+import sys
 
 
 def __getPathSeparator() -> str:
@@ -33,3 +34,5 @@ DEFAULT = {
     "host": "localhost"
 }
 
+LOG_DIRECTORY = DATABASE_PATH + __getPathSeparator() + "Log"
+GLOBAL_LOG_FILE_PATH = LOG_DIRECTORY + __getPathSeparator() + "global.log"
