@@ -1,6 +1,9 @@
 """ Event Loop The Heart Of HyperLite DB """
 from queue import Queue
 from .event import Event
+from hyperlite.logger import Log
+
+TAG = "Event_Loop"
 
 
 class EventLoop:
@@ -14,10 +17,12 @@ class EventLoop:
 
     def execute_sys_process(self):
         for i in range(0, self.system_process.qsize()):
+            Log.i(TAG, f"Executing 1 system process from total {self.system_process.qsize()} process")
             print("System Task Ack : " + str(self.system_process.get().exec()))
 
     def execute_query_process(self):
         for i in range(0, self.query_processes.qsize()):
+            Log.i(TAG, f"Executing 1 query process from total {self.query_processes.qsize()} process")
             Event.emmit("on_task_complete", self.query_processes.get().exec())
 
 
@@ -26,8 +31,10 @@ class LoopRunner:
         self.loop = EventLoop()
         self.isRunning: bool = self.shouldContinue()
         Event.on('loop-rerun', self.run)
+        Log.i(TAG, "EventLoop Ready")
 
     def run(self):
+        Log.i(TAG, "EventLoop Started")
         while self.shouldContinue():
             self.isRunning = True
             self.loop.execute_query_process()

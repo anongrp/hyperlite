@@ -16,8 +16,10 @@ from server import Socket
 from hyperlite.collection import Collection, Collections
 from hyperlite.process.process import renderProcess, renderRIDUProcess
 from hyperlite import config
-
+from hyperlite.logger import Log
 from storage_engine import initializer
+
+TAG = "Main_Process"  # Constant used just for logging
 
 
 def listenForConnection():
@@ -29,9 +31,11 @@ def initMe():
     if os.path.exists(config.COLLECTION_PATH):
         meta_col = initializer.getCollection(config.COLLECTION_PATH)
         Collections.meta_collection = meta_col
+        Log.i(TAG, "Meta collection found on disk")
     else:
         meta_col = Collection("hyperlite.col", "MetaData")
         Collections.meta_collection = meta_col
+        Log.w(TAG, "Meta collection file not found so creating new meta collection")
 
 
 if __name__ == "__main__":
@@ -43,20 +47,24 @@ if __name__ == "__main__":
 
     def manage_loop_status():
         if not loop_runner.isRunning:
+            Log.i(TAG, "EventLoop is stopped, Rerunning EventLoop...")
             Event.emmit('loop-rerun')
 
 
     def onRequest(data):
+        Log.d(TAG, f"New request - {data}")
         loop_runner.loop.query_processes.put(renderRIDUProcess(parsed_data=Parser.parse(data)))
         manage_loop_status()
 
 
     def onSubscription(data):
+        Log.d(TAG, f"New subscription request - {data}")
         # TODO: Adding subscription plan
         loop_runner.loop.subscriptions.put()
 
 
     def onCollectionChange(collection: Collection):
+        Log.i(TAG, "Event -> Collection Changed")
         for proc in renderProcess(collection):
             loop_runner.loop.system_process.put(proc)
         manage_loop_status()

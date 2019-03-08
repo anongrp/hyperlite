@@ -5,9 +5,9 @@ from hyperlite.config import *
 
 os.makedirs(LOG_DIRECTORY) if not os.path.exists(LOG_DIRECTORY) else print()
 logging.basicConfig(filename=GLOBAL_LOG_FILE_PATH,
-                    format='%(levelname)s: '
-                           '%(message)s',
+                    format='%(message)s',
                     filemode='w')
+
 
 """
 HEADER = '\033[95m'
@@ -27,58 +27,74 @@ class Log:
     logger.setLevel(logging.DEBUG)
 
     @staticmethod
-    def d(message):
+    def d(tag, message):
         """
         for debugging purpose only
+        :param tag: to categorize from other debug statement
         :param message: to print on console
         :return: :None
         """
-        print(colored(f"Debug: {message}", 'white', attrs=['bold']))
+        level = "Debug:"
+        message = f"{tag:20}{level:10}{message}"
+        print(colored(message, 'white', attrs=['bold']))
         Log.logger.debug(message)
 
     @staticmethod
-    def i(message):
+    def i(tag, message):
         """
         to show information about location or event execution
+        :param tag: to categorize from other debug statement
         :param message: to print on console
         :return: :None
         """
-        print(colored(f"Info: {message}", 'blue'))
+        level = "Info:"
+        message = f"{tag:20}{level:10}{message}"
+        print(colored(message, 'blue'))
         Log.logger.info(message)
 
     @staticmethod
-    def e(message):
+    def e(tag, message):
         """
         to show error on console or in log file
+        :param tag: to categorize from other debug statement
         :param message: to print on console
         :return: :None
         """
-        print(colored(f"Error: {message}", 'red'))
+        level = "Error:"
+        message = f"{tag:20}{level:10}{message}"
+        print(colored(message, 'red'))
         Log.logger.error(message)
 
     @staticmethod
-    def w(message):
+    def w(tag, message):
         """
         to show warning like unable to write on disk etc.
+        :param tag: to categorize from other debug statement
         :param message: to print on console
         :return: :None
         """
-        print(colored(f"Warning: {message}", 'yellow', attrs=['underline']))
+        level = "Warning:"
+        message = f"{tag:20}{level:10}{message}"
+        print(colored(message, 'yellow'))
         Log.logger.warning(message)
 
     @staticmethod
-    def c(message):
+    def c(tag, message):
         """
         to show critical messages like 'writing collection on disk takes too long time etc'
+        :param tag: to categorize from other debug statement
         :param message: to print on console
         :return: :None
         """
-        print(colored(f"Critical: {message}", 'red', attrs=['underline', 'bold']))
+        level = "Critical:"
+        message = f"{tag:20}{level:10}{message}"
+        print(colored(message, 'red', attrs=['bold']))
         Log.logger.critical(message)
 
 
-# Log.d("Its a debug , just for test")
-# Log.i("Ack delivered to client")
-# Log.e("Its a error in collection class, File not found")
-# Log.w("Its a warning program takes too much of time to write file on disk")
-# Log.c("its a critical part its not good for speed")
+# TAG = __file__.split('/')[len(__file__.split('/')) - 1]
+# Log.d(TAG, "Its a debug , just for test")
+# Log.i(TAG, "Ack delivered to client")
+# Log.e(TAG, "Its a error in collection class, File not found")
+# Log.w(TAG, "Its a warning program takes too much of time to write file on disk")
+# Log.c(TAG, "its a critical part its not good for speed")
