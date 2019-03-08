@@ -46,7 +46,7 @@ class ReadProcess(Process):
     def exec(self):
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
-        query_object = parser.hyperql_parser(query)
+        query_object = parser.parser(query)
         return {
             "Ack": col.read(query_object),
             "addr": self.data.addr
@@ -76,9 +76,9 @@ class UpdateProcess(Process):
     def exec(self):
         db_name, col_name, query = Collection.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
-        query_object = parser.hyperql_parser(query)
+        query_object = parser.parser(query)
         acknowledgement = {
-            "Ack": col.update(query_object, self.data.user_data),
+            "Ack": col.updateAll(query_object, self.data.user_data),
             "addr": self.data.addr
         }
 
@@ -109,7 +109,7 @@ class ReadOneProcess(Process):
     def exec(self):
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
-        query_object = parser.hyperql_parser(query)
+        query_object = parser.parser(query)
         return {
             "Ack": col.readOne(query_object),
             "addr": self.data.addr

@@ -16,6 +16,8 @@
 
 import time
 import uuid
+import copy
+
 from hyperlite.event import Event
 from hyperql import parser
 from storage_engine import initializer
@@ -113,14 +115,14 @@ class Collection:
             print()
         return True
 
-    def updateAll(self, query_object, new_data):
+    def updateAll(self, query_object: parser.Query, new_data):
         """
             Instance method to update Object's data of Collection.
             Takes query_object and new_data: dict as parameter and returns bool value.
         """
         filtered_data = None
 
-        for instruction in query_object.needed_query_methods:
+        for instruction in query_object.selective:
 
             # For first iteration
             if filtered_data is None:
@@ -143,30 +145,35 @@ class Collection:
         else:
             return False
 
-    def _read(self, objects: list, instruction={}, instructions=[], modifiers=None):
+    def _read(self, objects: list, instruction={}, view=None, modifiers=None):
         """     Private method to read the Objects data from the collection.    """
 
         output_objs = []
-        if not instructions:
-            for object in objects:
-                if instruction['filter'](data=instruction['data'], field=object[instruction['field']]):
+        if not view:
+            for hy_object in objects:
+                if instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
                     output_objs.append(object)
         else:
-            for object in objects:
-                output_obj = {}
-                for instruction in instructions:
-                    if object[instruction['field']]:
-                        output_obj.update({
-                            instruction['field']: object[instruction['field']]
-                        })
-                output_objs.append(output_obj)
+            if type(view) is list:
+                for hy_object in objects:
+                    output_obj = {}
+                    for instruction in view:
+                        hy_object_copy = copy.deepcopy(hy_object)
+                        for insc in instruction.split('.'):
+                            if hy_object_copy[insc]:
+                                hy_object_copy = hy_object_copy[insc]
+                            else:
+                                hy_object_copy = '%NOT_OBJECT%'
+                        output_obj[instruction] = hy_object_copy
+                    output_objs.append(output_obj)
+            else:
+                output_objs = objects
+            if modifiers != DEFAULT_QUERY.modifiers:
+                if modifiers is not None:
+                    output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
+            return output_objs
 
-        if modifiers != DEFAULT_QUERY.modifiers:
-            if modifiers is not None:
-                output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
-        return output_objs
-
-    def read(self, query_object, one_flag=False):
+    def read(self, query_object: parser.Query, one_flag=False):
         """
             Instance method to get Object's data from Collection.
             Takes query_object as parameter and returns a list of Hyperlite Objects.
@@ -175,25 +182,20 @@ class Collection:
             query parsing.
         """
         filtered_data = None
-        echo_queries = []  # stores echo query instructions
 
-        for instruction in query_object.needed_query_methods[::-1]:
-            if instruction['filter'] is not parser.QueryOperations.echo:
-                # For first iteration
-                if filtered_data is None:
-                    filtered_data = self._read(objects=self.objects, instruction=instruction)
-                else:
-                    filtered_data = self._read(objects=filtered_data, instruction=instruction)
+        for instruction in query_object.selective:
+            if filtered_data is None:
+                filtered_data = self._read(objects=self.objects, instruction=instruction)
             else:
-                echo_queries.append(instruction)
+                filtered_data = self._read(objects=filtered_data, instruction=instruction)
 
         if one_flag is True:
             if not filtered_data:
                 return filtered_data
             else:
-                return self._read(objects=[filtered_data[0]], instructions=echo_queries, modifiers=query_object.modifiers)
-        # Perform all echo operations together and return required data.
-        return self._read(objects=filtered_data, instructions=echo_queries, modifiers=query_object.modifiers)
+                return self._read(objects=[filtered_data[0]], view=query_object.view, modifiers=query_object.modifiers)
+
+        return self._read(objects=filtered_data, view=query_object.view, modifiers=query_object.modifiers)
 
     def delete(self, object_id: str) -> bool:
         """
