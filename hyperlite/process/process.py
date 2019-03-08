@@ -2,6 +2,9 @@ from storage_engine import coliter
 from ..collection import Collection, Collections
 from hyperql import parser
 from ..event import Event
+from hyperlite.logger import Log
+
+TAG = "Process_API"
 
 
 class Process(object):
@@ -42,8 +45,10 @@ class EncryptionProcess(Process):
 class ReadProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "ReadProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing ReadProcess.")
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         query_object = parser.parser(query)
@@ -56,8 +61,10 @@ class ReadProcess(Process):
 class InsertProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "InsertProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing InsertProcess.")
         db_name, col_name = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         acknowledgement = {
@@ -72,8 +79,10 @@ class InsertProcess(Process):
 class UpdateProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "UpdateProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing UpdateProcess.")
         db_name, col_name, query = Collection.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         query_object = parser.parser(query)
@@ -89,8 +98,10 @@ class UpdateProcess(Process):
 class DeleteProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "DeleteProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing DeleteProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         acknowledgement = {
@@ -105,8 +116,10 @@ class DeleteProcess(Process):
 class ReadOneProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "ReadOneProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing ReadOneProcess.")
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         query_object = parser.parser(query)
@@ -119,8 +132,10 @@ class ReadOneProcess(Process):
 class UpdateOneProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "UpdateOneProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing UpdateOneProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         acknowledgement = {
@@ -135,8 +150,10 @@ class UpdateOneProcess(Process):
 class ReadByIdProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
+        Log.i(TAG, "ReadByIdProcess created.")
 
     def exec(self):
+        Log.i(TAG, "Executing ReadByIdProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
         col = Collections.get_collection(col_name, db_name)
         acknowledgement = {
@@ -147,6 +164,7 @@ class ReadByIdProcess(Process):
 
 
 def renderRIDUProcess(parsed_data):
+    Log.i(TAG, "Rendering Process...")
     if parsed_data.request_type == 'Read':
         return ReadProcess(parsed_data)
     elif parsed_data.request_type == 'Update':
@@ -162,6 +180,7 @@ def renderRIDUProcess(parsed_data):
     elif parsed_data.request_type == 'UpdateOne':
         return UpdateOneProcess(parsed_data)
     else:
+        Log.e(TAG, "No compatible request_type found.")
         return None
 
 
