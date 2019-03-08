@@ -223,7 +223,7 @@ def parser(query: str) -> Query:
 
 if __name__ == "__main__":
     query = """ 
-            addr.city,
+            *,name,
             email &eq "username@domain.com", 
             city &eq "city_name",
             age &gt 18,
