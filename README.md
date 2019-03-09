@@ -38,7 +38,7 @@ HyperQl(Hyper Query Language) is an official query language for communicating wi
 for more info, check out Hyperql official document.
 
 ### Operations
- As we know, that Hyperlite works on RIDU, instead of CRUD operations. RIDU means read, insert, update and delete, and one more extra operation is 'Subscriptions'. That means, in hyperlite total five types of operations are available for client, so we can say that it works on RIDUS right! YES! ...BUT No, you can't, because officially we don't include it as an operation even though it is an operation but it is not quick operation, it's a long running opertion that runs forever while client has not unsubscribed it or server is not responding or may crash (system, not server; because hyperlite server will never crash). 
+ As we know, that Hyperlite works on RIDU, instead of CRUD operations. RIDU means to read, insert, update and delete, and one more extra operation is 'Subscriptions'. That means, in Hyperlite total five types of operations are available for the client, so we can say that it works on RIDUS right! YES! …BUT No, you can't, because officially we don't include it as an operation even though it is an operation but it is not quick operation, it's a long-running operation that runs forever while client has not unsubscribed it or server is not responding or may crash (system, not server; because Hyperlite server will never crash).
  for more info check out Subscriptions in official documentation.
 
 | Operation | Description |
