@@ -66,7 +66,9 @@ class InsertProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing InsertProcess.")
         db_name, col_name = BaseRIDUProcess.meta_separator(self.data.meta_data)
+        Log.d(TAG, f"{db_name, col_name}")
         col = Collections.get_collection(col_name, db_name)
+        Log.d(TAG, "col obj fetched.")
         acknowledgement = {
             "Ack": col.insert(self.data.user_data),
             "addr": self.data.addr

@@ -22,8 +22,10 @@ from hyperlite.event import Event
 from hyperql import parser
 from storage_engine import initializer
 from hyperlite import config
+from .logger import Log
 
 DEFAULT_QUERY = parser.Query()
+TAG = "Collection_API"
 
 
 class Collection:
@@ -37,6 +39,7 @@ class Collection:
         self.objects = []
         self.indexes = {}
         self.parent = parent
+        Log.i(TAG, "Collection Object created.")
 
     def __str__(self):
         return str(self.__dict__)
@@ -47,6 +50,7 @@ class Collection:
         :param user_data: it's a type of dictionary
         :return: objectId: it's a type of string
         """
+        Log.i(TAG, f"Inserting Object into {self.col_name} Collection.")
         object_id = Objects.generate_id()  # unique id for every object
         user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
@@ -54,7 +58,8 @@ class Collection:
         self.indexes.update({
             object_id: self.objects.__len__() - 1
         })
-
+        Log.i(TAG, f"Object Inserted into {self.col_name} Collection.")
+        Log.d(TAG, f"returning object_id {object_id} to the client.")
         return object_id
 
     def _update(self, new_data: dict, update_objects: list):
@@ -108,11 +113,6 @@ class Collection:
 
                 else:
                     hy_object[prop] = new_data[prop]
-            print()
-            print()
-            print(hy_object)
-            print()
-            print()
         return True
 
     def updateAll(self, query_object: parser.Query, new_data):
