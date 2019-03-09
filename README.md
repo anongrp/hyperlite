@@ -6,7 +6,6 @@
  
  <!-- [![Status](https://img.shields.io/badge/hyperlite-underdevelopment-blue.svg)](https://github.com/anongrp/hyperlite/releases)-->
  [![Build Status](https://travis-ci.org/anongrp/hyperlite.svg?branch=master)](https://travis-ci.org/anongrp/hyperlite)
- <!--[![Version](https://img.shields.io/pypi/v/nine.svg)]-->
  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
  [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://anongrp.github.io)
  [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/anongrp/hyperlite/releases)
