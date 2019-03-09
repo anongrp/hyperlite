@@ -1,4 +1,1 @@
-readOne
-hyperql parser  :
-    *  --> return all
-    remove errors
+write loggers

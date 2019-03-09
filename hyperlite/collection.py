@@ -22,8 +22,10 @@ from hyperlite.event import Event
 from hyperql import parser
 from storage_engine import initializer
 from hyperlite import config
+from .logger import Log
 
 DEFAULT_QUERY = parser.Query()
+TAG = "Collection_API"
 
 
 class Collection:
@@ -37,6 +39,7 @@ class Collection:
         self.objects = []
         self.indexes = {}
         self.parent = parent
+        Log.i(TAG, "Collection Object created.")
 
     def __str__(self):
         return str(self.__dict__)
@@ -47,6 +50,7 @@ class Collection:
         :param user_data: it's a type of dictionary
         :return: objectId: it's a type of string
         """
+        Log.i(TAG, f"Inserting Object into {self.col_name} Collection.")
         object_id = Objects.generate_id()  # unique id for every object
         user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
@@ -54,7 +58,8 @@ class Collection:
         self.indexes.update({
             object_id: self.objects.__len__() - 1
         })
-
+        Log.i(TAG, f"Object Inserted into {self.col_name} Collection.")
+        Log.d(TAG, f"returning object_id {object_id} to the client.")
         return object_id
 
     def _update(self, new_data: dict, update_objects: list):
@@ -108,11 +113,6 @@ class Collection:
 
                 else:
                     hy_object[prop] = new_data[prop]
-            print()
-            print()
-            print(hy_object)
-            print()
-            print()
         return True
 
     def updateAll(self, query_object: parser.Query, new_data):
@@ -148,12 +148,18 @@ class Collection:
     def _read(self, objects: list, instruction={}, view=None, modifiers=None):
         """     Private method to read the Objects data from the collection.    """
 
+        Log.i(TAG, "Executing _read...")
+
         output_objs = []
+
         if not view:
+            Log.i(TAG, "Executing selective query...")
             for hy_object in objects:
                 if instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
+                    Log.d(TAG, "Appending object to output_objs list")
                     output_objs.append(object)
         else:
+            Log.i(TAG, "Executing view query...")
             if type(view) is list:
                 for hy_object in objects:
                     output_obj = {}
@@ -167,11 +173,13 @@ class Collection:
                         output_obj[instruction] = hy_object_copy
                     output_objs.append(output_obj)
             else:
+                Log.i(TAG, "view query contains \'*\'")
                 output_objs = objects
             if modifiers != DEFAULT_QUERY.modifiers:
                 if modifiers is not None:
                     output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
-            return output_objs
+
+        return output_objs
 
     def read(self, query_object: parser.Query, one_flag=False):
         """
@@ -181,19 +189,36 @@ class Collection:
             filtered_data stores the remaining data after every iteration of
             query parsing.
         """
+        if one_flag:
+            Log.d(TAG, "Internal call to read by readOne")
+        else:
+            Log.i(TAG, "Executing read...")
+
         filtered_data = None
 
-        for instruction in query_object.selective:
-            if filtered_data is None:
-                filtered_data = self._read(objects=self.objects, instruction=instruction)
-            else:
-                filtered_data = self._read(objects=filtered_data, instruction=instruction)
+        if not query_object.selective:
+            Log.d(TAG, "No selective query found.")
+            filtered_data = self.objects
+        else:
+            for instruction in query_object.selective:
+                if filtered_data is None:
+                    Log.i(TAG, "Filtering data for first time...")
+                    filtered_data = self._read(objects=self.objects, instruction=instruction)
+                    Log.d(TAG, f"filtered data = {filtered_data}")
+                else:
+                    Log.i(TAG, "Performing operations on filtered data...")
+                    filtered_data = self._read(objects=filtered_data, instruction=instruction)
+                    Log.d(TAG, f"filtered data = {filtered_data}")
 
         if one_flag is True:
             if not filtered_data:
+                Log.i(TAG, "Empty filtered_data found")
                 return filtered_data
             else:
+                Log.i(TAG, "calling _read method for readOne")
                 return self._read(objects=[filtered_data[0]], view=query_object.view, modifiers=query_object.modifiers)
+
+        Log.i(TAG, "calling _read method for read")
 
         return self._read(objects=filtered_data, view=query_object.view, modifiers=query_object.modifiers)
 
@@ -226,7 +251,7 @@ class Collection:
         :param query_object: object of Query class `from hyperql.parser import Query`
         :return: result after applying the query
         """
-
+        Log.i(TAG, "Executing readOne...")
         return self.read(query_object, one_flag=True)
 
     @classmethod
@@ -285,11 +310,11 @@ class Collections:
                 # Fetching or create new Collection
                 print("Fetching or create new Collection")
                 query = f"""
-                        time_stamp = it,
+                        time_stamp,
                         db_name &eq "{db_name}",
                         col_name &eq "{col_name}"
                         """
-                result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
+                result = Collections.meta_collection.readOne(parser.parser(query))
                 if not result:
                     print("Getting new collection because collection is not in ram and also on a disk")
                     return Collections.create_new_collection(col_name, db_name)
@@ -302,11 +327,11 @@ class Collections:
                     return result
         else:
             query = f"""
-                    time_stamp = it,
+                    time_stamp,
                     db_name &eq "{db_name}",
                     col_name &eq "{col_name}"
                     """
-            result = Collections.meta_collection.readOne(parser.hyperql_parser(query))
+            result = Collections.meta_collection.readOne(parser.parser(query))
             if not result:
                 print("Getting new collection: @no database found")
                 return Collections.create_new_collection(col_name, db_name)
