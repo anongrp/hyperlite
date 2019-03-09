@@ -11,6 +11,7 @@
  [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://anongrp.github.io)
  [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/anongrp/hyperlite/releases)
  [![Github all releases](https://img.shields.io/github/downloads/Naereen/StrapDown.js/total.svg)](https://GitHub.com/Naereen/StrapDown.js/releases/)
+ [![Downloads](https://img.shields.io/github/downloads/anongrp/hyperlite/Alpha/total.svg?style=flat-square)(https://github.com/anongrp/hyperlite/releases)]
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  </h>
 
