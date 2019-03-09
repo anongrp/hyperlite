@@ -9,6 +9,7 @@
  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
  [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://anongrp.github.io)
  [![Download](https://img.shields.io/github/downloads/anongrp/hyperlite/Alpha/total.svg?style=flat-square)](https://github.com/anongrp/hyperlite/releases)
+ [![Percentage of issues still open](http://isitmaintained.com/badge/open/anongrp/hyperlite.svg)](http://isitmaintained.com/project/anongrp/hyperlite "Percentage of issues still open")
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  </h>
 
