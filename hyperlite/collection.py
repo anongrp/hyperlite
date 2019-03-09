@@ -310,7 +310,7 @@ class Collections:
                 # Fetching or create new Collection
                 print("Fetching or create new Collection")
                 query = f"""
-                        time_stamp = it,
+                        time_stamp,
                         db_name &eq "{db_name}",
                         col_name &eq "{col_name}"
                         """
@@ -327,7 +327,7 @@ class Collections:
                     return result
         else:
             query = f"""
-                    time_stamp = it,
+                    time_stamp,
                     db_name &eq "{db_name}",
                     col_name &eq "{col_name}"
                     """
