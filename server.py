@@ -47,7 +47,7 @@ class Socket(socket.socket):
                     # code to communicate with hyperlite engine
                 except Exception as err:
                     Log.e(TAG, f"Connection broken -> {err}")
-                    client.close()
+                    # client.close()
                     break
 
     def send_ack(self, ack):
