@@ -8,7 +8,6 @@
  [![Build Status](https://travis-ci.org/anongrp/hyperlite.svg?branch=master)](https://travis-ci.org/anongrp/hyperlite)
  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
  [![Documentation Status](https://readthedocs.org/projects/ansicolortags/badge/?version=latest)](http://anongrp.github.io)
- [![GitHub release](https://img.shields.io/github/release/Naereen/StrapDown.js.svg)](https://github.com/anongrp/hyperlite/releases)
  [![Download](https://img.shields.io/github/downloads/anongrp/hyperlite/Alpha/total.svg?style=flat-square)](https://github.com/anongrp/hyperlite/releases)
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
  </h>
