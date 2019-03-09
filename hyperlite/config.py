@@ -30,7 +30,7 @@ DATABASE_FORMAT = {
 }
 
 DEFAULT = {
-    "port": 9898,
+    "port": 8989,
     "host": "localhost"
 }
 

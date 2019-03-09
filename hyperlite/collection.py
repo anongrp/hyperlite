@@ -152,15 +152,21 @@ class Collection:
 
         output_objs = []
 
-        if not view:
+        if instruction != {}:
             Log.i(TAG, "Executing selective query...")
             for hy_object in objects:
+                Log.d(TAG, f"{instruction}")
+                # Log.d(TAG, f"hy_object = {hy_object}")
+                # Log.d(TAG, instruction['field'])
+                # Log.d(TAG, hy_object[instruction['field']])
+                Log.d(TAG, f"{instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']])}")
                 if instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
                     Log.d(TAG, "Appending object to output_objs list")
-                    output_objs.append(object)
+                    output_objs.append(hy_object)
         else:
             Log.i(TAG, "Executing view query...")
             if type(view) is list:
+                Log.d(TAG, f"{view}")
                 for hy_object in objects:
                     output_obj = {}
                     for instruction in view:
@@ -189,6 +195,7 @@ class Collection:
             filtered_data stores the remaining data after every iteration of
             query parsing.
         """
+        Log.w("Collections class", f"{query_object.view} line - 198")
         if one_flag:
             Log.d(TAG, "Internal call to read by readOne")
         else:
@@ -201,6 +208,7 @@ class Collection:
             filtered_data = self.objects
         else:
             for instruction in query_object.selective:
+                Log.d("Inside read", f"{instruction}")
                 if filtered_data is None:
                     Log.i(TAG, "Filtering data for first time...")
                     filtered_data = self._read(objects=self.objects, instruction=instruction)
@@ -211,11 +219,12 @@ class Collection:
                     Log.d(TAG, f"filtered data = {filtered_data}")
 
         if one_flag is True:
+            Log.w("Collections class", f"{query_object.view} line - 222")
             if not filtered_data:
                 Log.i(TAG, "Empty filtered_data found")
                 return filtered_data
             else:
-                Log.i(TAG, "calling _read method for readOne")
+                Log.i(TAG, f"calling _read method for readOne view = {query_object.view}")
                 return self._read(objects=[filtered_data[0]], view=query_object.view, modifiers=query_object.modifiers)
 
         Log.i(TAG, "calling _read method for read")
@@ -251,6 +260,7 @@ class Collection:
         :param query_object: object of Query class `from hyperql.parser import Query`
         :return: result after applying the query
         """
+        Log.w("Collections class", f"{query_object.view} line - 261")
         Log.i(TAG, "Executing readOne...")
         return self.read(query_object, one_flag=True)
 
@@ -314,6 +324,7 @@ class Collections:
                         db_name &eq "{db_name}",
                         col_name &eq "{col_name}"
                         """
+                Log.w("Collections class", f"{parser.parser(query).view} line - 324")
                 result = Collections.meta_collection.readOne(parser.parser(query))
                 if not result:
                     print("Getting new collection because collection is not in ram and also on a disk")
@@ -331,6 +342,7 @@ class Collections:
                     db_name &eq "{db_name}",
                     col_name &eq "{col_name}"
                     """
+            Log.w("Collections class", f"{parser.parser(query).view} line -342")
             result = Collections.meta_collection.readOne(parser.parser(query))
             if not result:
                 print("Getting new collection: @no database found")
