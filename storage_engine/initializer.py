@@ -1,12 +1,19 @@
 import _pickle
-import os
-from hyperlite import config
+from hyperlite.logger import Log
+
+TAG = "Collection_Reader"
 
 
 def getCollection(path):
-    return _pickle.load(open(path, 'rb'))
+    Log.d(TAG, f"Getting a collection from {path}")
+    try:
+        return _pickle.load(open(path, 'rb'))
+    except Exception as ex:
+        Log.w(TAG, "Someone explicitly deleted the collection file from disk")
+        Log.e(TAG, f"Collection is not exist on {path}. {ex}")
+        return None
 
-#
+
 # def getCollections(database: Database):
 #     collections = []
 #     database_dir = config.DATABASE_PATH + __getPathSeparator() + database.name

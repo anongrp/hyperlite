@@ -27,7 +27,9 @@ def listenForConnection():
 
 
 def initMe():
-    meta_col = None
+    Log.c(TAG, "Starting Hyperlite Database")
+    Log.w(TAG, f"We are running on {config.PLATFORM} Operating System")
+    Log.i(TAG, f"Database files can be found on {config.DATABASE_PATH} ")
     if os.path.exists(config.COLLECTION_PATH):
         meta_col = initializer.getCollection(config.COLLECTION_PATH)
         Collections.meta_collection = meta_col
