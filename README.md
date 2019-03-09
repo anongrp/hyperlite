@@ -28,12 +28,12 @@ It works on RIDU Operation which can be done by **HyperQl**, the standard Hyperl
 
 ## Introduction To HyperQl
 `Like a query language unlike sql language`
-HyperQl(Hyper Query Language) is an official query laguage for comunicating with database. hyperQl is specially designed for Hyperlite database.
+HyperQl(Hyper Query Language) is an official query language for communicating with the database. hyperQl is specially designed for Hyperlite database.
 #### Types of HyperQl
 * Selective HyperQl
-    : In this type of query, user write a query for selecting the fields. It is same as WHERE clause in SQL.
+    : In this type of query, the user writes a query for selecting the fields. It is the same as the WHERE clause in SQL.
 * View HyperQl
-    : In this type of query, user write a query for viewing the data. It is same as SELECT in SQL.
+    : In this type of query, the user writes a query for viewing the data. It is the same as SELECT in SQL.
 
 for more info, check out Hyperql official document.
 
