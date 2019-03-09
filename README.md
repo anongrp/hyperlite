@@ -2,8 +2,7 @@
 <img src="https://raw.githubusercontent.com/anongrp/hyperlite/master/docs/assets/logos/Hyperlite%20logo%20500x500.png">
 </p>
 
-<h align="center">
- 
+<p align="center">
  <!-- [![Status](https://img.shields.io/badge/hyperlite-underdevelopment-blue.svg)](https://github.com/anongrp/hyperlite/releases)-->
  [![Build Status](https://travis-ci.org/anongrp/hyperlite.svg?branch=master)](https://travis-ci.org/anongrp/hyperlite)
  [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
@@ -11,7 +10,7 @@
  [![Download](https://img.shields.io/github/downloads/anongrp/hyperlite/Alpha/total.svg?style=flat-square)](https://github.com/anongrp/hyperlite/releases)
  [![Percentage of issues still open](http://isitmaintained.com/badge/open/anongrp/hyperlite.svg)](https://github.com/anongrp/hyperlite/issues "Percentage of issues still open")
  [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
- </h>
+ </p>
 
 
 Hyperlite is an event based and NoSql realtime database that provides a simple way to store and manage complex data. It works on non blocking mechanism. In Hyperlite, data is stored into objects, fields, and collections, and it is auto indexed to make it easier to find relevant information.
