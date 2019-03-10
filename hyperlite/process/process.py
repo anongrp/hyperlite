@@ -180,12 +180,21 @@ class DataPipelineProcess(Process):
         mainCollection = Collections.get_collection(mainColName, database)
         targetCollection = Collections.get_collection(targetColName, database)
         references = mainCollection.read(parser.parser(f"{fieldAddress}"))
+        ref_key = DataPipelineProcess.getLastFieldSegment(fieldAddress)
         for reference in references:
-            if type(references) is list:
-                for ref in reference:
-                    self.output.append(targetCollection.findById(ref.get(DataPipelineProcess.getLastFieldSegment(fieldAddress))))
+            if type(reference.get(ref_key)) is list:
+                for ref in reference.get(ref_key):
+                    self.output.append(targetCollection
+                                       .findById(ref))
             else:
-                self.output = targetCollection.findById(reference.get(DataPipelineProcess.getLastFieldSegment(fieldAddress)))
+                self.output = targetCollection \
+                    .findById(reference.get(ref_key))
+
+        acknowledgement = {
+            "Ack": self.output,
+            "addr": self.data.get('addr')
+        }
+        return acknowledgement
 
     @staticmethod
     def getLastFieldSegment(fieldRef):
