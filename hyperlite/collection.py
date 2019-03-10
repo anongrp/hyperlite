@@ -265,6 +265,7 @@ class Collection:
         Log.d(TAG, f"{object_id}")
         if self.findById(object_id) is not None:
             self.objects[self.indexes[object_id]] = None
+            self.indexes[object_id] = None
             Log.i(TAG, "Object Replaced by None")
             return True
         else:
