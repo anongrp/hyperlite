@@ -64,6 +64,7 @@ class Collection:
 
     def _update(self, new_data: dict, update_objects: list):
         """     Private method to update an object of the collection.    """
+        Log.i(TAG, "Executing _update method...")
 
         for hy_object in update_objects:
             for prop in new_data:
@@ -71,6 +72,7 @@ class Collection:
                     operator = list(new_data[prop].keys())[0]
                     if operator == "&inc":
                         try:
+                            Log.i(TAG, "Performing &inc operation...")
                             hy_object[prop] += new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
@@ -78,6 +80,7 @@ class Collection:
 
                     if operator == "&dec":
                         try:
+                            Log.i(TAG, "Performing &dec operation...")
                             hy_object[prop] -= new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
@@ -85,6 +88,7 @@ class Collection:
 
                     if operator == "&mul":
                         try:
+                            Log.i(TAG, "Performing &mul operation...")
                             hy_object[prop] *= new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
@@ -92,6 +96,7 @@ class Collection:
 
                     if operator == "&div":
                         try:
+                            Log.i(TAG, "Performing &div operation...")
                             hy_object[prop] /= new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
@@ -99,6 +104,7 @@ class Collection:
 
                     if operator == "&pow":
                         try:
+                            Log.i(TAG, "Performing &pow operation...")
                             hy_object[prop] **= new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
@@ -106,12 +112,14 @@ class Collection:
 
                     if operator == "&floor":
                         try:
+                            Log.i(TAG, "Performing &floor operation...")
                             hy_object[prop] //= new_data[prop][operator]
                         except KeyError:
                             hy_object[prop] = 0
                             hy_object[prop] //= new_data[prop][operator]
 
                 else:
+                    Log.i(TAG, "Performing data insert operation...")
                     hy_object[prop] = new_data[prop]
         return True
 
@@ -120,17 +128,23 @@ class Collection:
             Instance method to update Object's data of Collection.
             Takes query_object and new_data: dict as parameter and returns bool value.
         """
+        Log.i(TAG, "Executing updateAll...")
+
         filtered_data = None
 
         for instruction in query_object.selective:
 
-            # For first iteration
+            Log.i(TAG, "Executing selective query...")
             if filtered_data is None:
+                Log.i(TAG, "Filtering data for first time...")
                 filtered_data = self._read(objects=self.objects, instruction=instruction)
-            # If filtered_data is not None
+                Log.d(TAG, f"filtered data = {filtered_data.__repr__()}")
             else:
+                Log.i(TAG, "Performing operations on filtered data...")
                 filtered_data = self._read(objects=filtered_data, instruction=instruction)
+                Log.d(TAG, f"filtered data = {filtered_data.__repr__()}")
 
+        Log.d(TAG, "Internal call to _update by update")
         return self._update(new_data=new_data, update_objects=filtered_data)
 
     def updateOne(self, object_id: str, new_data: dict):
@@ -138,9 +152,14 @@ class Collection:
             Instance method to update a single Object data of Collection.
             Takes object_id and new_data: dict as parameter and returns bool value.
         """
+        Log.i(TAG, "Executing updateOne...")
+
         update_obj = self.findById(object_id)
 
         if update_obj is not None:
+
+            Log.d(TAG, "Internal call to _update by updateOne")
+
             return self._update(new_data, [update_obj])
         else:
             return False
@@ -167,9 +186,6 @@ class Collection:
                                 output_objs.append(hy_object)
                                 break
 
-                    # if field in hy_object and instruction['filter'](data=instruction['data'], field=field):
-                    #     Log.d(TAG, "Appending object to output_objs list")
-                    #     output_objs.append(hy_object)
         else:
             Log.i(TAG, "Executing view query...")
             if type(view) is list:
@@ -204,7 +220,6 @@ class Collection:
             filtered_data stores the remaining data after every iteration of
             query parsing.
         """
-        Log.w("Collections class", f"{query_object.view} line - 198")
         if one_flag:
             Log.d(TAG, "Internal call to read by readOne")
         else:
