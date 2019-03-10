@@ -2,6 +2,7 @@ import logging
 import os
 from termcolor import colored
 from hyperlite.config import *
+import const
 
 os.makedirs(LOG_DIRECTORY) if not os.path.exists(LOG_DIRECTORY) else print()
 logging.basicConfig(filename=GLOBAL_LOG_FILE_PATH,
@@ -90,6 +91,10 @@ class Log:
         message = f"{tag:20}{level:10}{message}"
         print(colored(message, 'red', attrs=['bold']))
         Log.logger.critical(message)
+
+    @staticmethod
+    def welcome():
+            print(const.WELCOME_LOGO)
 
 
 # TAG = __file__.split('/')[len(__file__.split('/')) - 1]

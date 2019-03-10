@@ -27,6 +27,7 @@ def listenForConnection():
 
 
 def initMe():
+    Log.welcome()
     Log.c(TAG, "Starting Hyperlite Database")
     Log.w(TAG, f"We are running on {config.PLATFORM} Operating System")
     Log.i(TAG, f"Database files can be found on {config.DATABASE_PATH} ")

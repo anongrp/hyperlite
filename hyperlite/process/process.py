@@ -177,10 +177,12 @@ class DataPipelineProcess(Process):
         mainColName = self.data.get('Collection')
         targetColName = self.data.get('to')
         fieldAddress = self.data.get('fieldRef')
+
         mainCollection = Collections.get_collection(mainColName, database)
         targetCollection = Collections.get_collection(targetColName, database)
         references = mainCollection.read(parser.parser(f"{fieldAddress}"))
         ref_key = DataPipelineProcess.getLastFieldSegment(fieldAddress)
+        print(mainCollection.read(parser.parser(self.data.get('query'))))
         for reference in references:
             if type(reference.get(ref_key)) is list:
                 for ref in reference.get(ref_key):
