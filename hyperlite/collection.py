@@ -178,9 +178,9 @@ class Collection:
                     output_obj = {}
                     for instruction in view:
                         hy_object_copy = copy.deepcopy(hy_object)
-                        for insc in instruction.split('.'):
-                            if hy_object_copy[insc]:
-                                hy_object_copy = hy_object_copy[insc]
+                        for instruct in instruction.split('.'):
+                            if hy_object_copy[instruct]:
+                                hy_object_copy = hy_object_copy[instruct]
                             else:
                                 hy_object_copy = '%NOT_OBJECT%'
                         output_obj[instruction] = hy_object_copy
@@ -191,6 +191,8 @@ class Collection:
             if modifiers != DEFAULT_QUERY.modifiers:
                 if modifiers is not None:
                     output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
+
+        Log.i(TAG, "returning output_objs")
 
         return output_objs
 
@@ -215,18 +217,16 @@ class Collection:
             filtered_data = self.objects
         else:
             for instruction in query_object.selective:
-                Log.d("Inside read", f"{instruction}")
                 if filtered_data is None:
                     Log.i(TAG, "Filtering data for first time...")
                     filtered_data = self._read(objects=self.objects, instruction=instruction)
-                    Log.d(TAG, f"filtered data = {filtered_data}")
+                    Log.d(TAG, f"filtered data = {filtered_data.__repr__()}")
                 else:
                     Log.i(TAG, "Performing operations on filtered data...")
                     filtered_data = self._read(objects=filtered_data, instruction=instruction)
-                    Log.d(TAG, f"filtered data = {filtered_data}")
+                    Log.d(TAG, f"filtered data = {filtered_data.__repr__()}")
 
         if one_flag is True:
-            Log.w("Collections class", f"{query_object.view} line - 222")
             if not filtered_data:
                 Log.i(TAG, "Empty filtered_data found")
                 return filtered_data
@@ -243,8 +243,10 @@ class Collection:
             Instance method to remove object.
             takes object_id as parameter.
         """
+        Log.i(TAG, "Executing delete method...")
         if self.findById(object_id) is not None:
             self.indexes[self.findById(object_id)] = None
+            Log.i(TAG, "Object Replaced by None")
             return True
         else:
             return False
@@ -255,10 +257,11 @@ class Collection:
             returns object associated with the given object_id.
         """
         try:
+            Log.i(TAG, "Fetching object by id")
             return self.objects[self.indexes[object_id]]
 
         except KeyError:
-            # if object_id is not available
+            Log.i(TAG, "Object not found.")
             return None
 
     def readOne(self, query_object):
