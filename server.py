@@ -23,10 +23,11 @@ class Socket(socket.socket):
             super().listen(1)
             client, addr = super().accept()
             Log.d(TAG, f"Client connected with {addr}")
-            self.clients.append({
+            clientObj = {
                 "client": client,
                 "addr": addr
-            })
+            }
+            self.clients.append(clientObj)
             while True:
                 try:
                     raw_query = str(client.recv(1024).decode("UTF-8"))
@@ -45,8 +46,24 @@ class Socket(socket.socket):
                         Event.emmit('req_sub', json.dumps(json_query))
 
                     # code to communicate with hyperlite engine
+                except ConnectionResetError as err:
+                    Log.e(TAG, f"Connection Reset -> {err}")
+                    client.close()
+                    Log.d(TAG, f"{self.clients}")
+                    self.clients.remove(clientObj)
+                    Log.i(TAG, "Client removed from Clients list")
+                    Log.d(TAG, f"{self.clients}")
+                    break
                 except Exception as err:
                     Log.e(TAG, f"Connection broken -> {err}")
+                    # errorSchema = """
+                    # {
+                    #     "type": "Error",
+                    #     "message": "{}"
+                    # }
+                    # """.format(err)
+                    # Log.d(TAG, errorSchema)
+                    # client.send(errorSchema.encode('UTF-8'))
                     # client.close()
                     break
 

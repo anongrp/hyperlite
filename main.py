@@ -46,7 +46,6 @@ if __name__ == "__main__":
     loop_runner = event_loop.LoopRunner()
     loop_runner.run()
 
-
     def manage_loop_status():
         if not loop_runner.isRunning:
             Log.i(TAG, "EventLoop is stopped, Rerunning EventLoop...")
@@ -68,6 +67,8 @@ if __name__ == "__main__":
     def onCollectionChange(collection: Collection):
         Log.i(TAG, "Event -> Collection Changed")
         for proc in renderProcess(collection):
+            loop_runner.loop.system_process.put(proc)
+        for proc in renderProcess(Collections.meta_collection):
             loop_runner.loop.system_process.put(proc)
         manage_loop_status()
 
