@@ -155,14 +155,21 @@ class Collection:
         if instruction != {}:
             Log.i(TAG, "Executing selective query...")
             for hy_object in objects:
-                Log.d(TAG, f"{instruction}")
-                # Log.d(TAG, f"hy_object = {hy_object}")
-                # Log.d(TAG, instruction['field'])
-                # Log.d(TAG, hy_object[instruction['field']])
-                Log.d(TAG, f"{instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']])}")
-                if instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
-                    Log.d(TAG, "Appending object to output_objs list")
-                    output_objs.append(hy_object)
+                if instruction['field'].find('.') == -1:
+                    if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
+                        output_objs.append(hy_object)
+                else:
+                    currentObj = hy_object
+                    for field in instruction['field'].split('.'):
+                        if field in currentObj:
+                            currentObj = currentObj[field]
+                            if instruction['filter'](data=instruction['data'], field=currentObj):
+                                output_objs.append(hy_object)
+                                break
+
+                    # if field in hy_object and instruction['filter'](data=instruction['data'], field=field):
+                    #     Log.d(TAG, "Appending object to output_objs list")
+                    #     output_objs.append(hy_object)
         else:
             Log.i(TAG, "Executing view query...")
             if type(view) is list:
