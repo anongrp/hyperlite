@@ -262,8 +262,9 @@ class Collection:
             takes object_id as parameter.
         """
         Log.i(TAG, "Executing delete method...")
+        Log.d(TAG, f"{object_id}")
         if self.findById(object_id) is not None:
-            self.indexes[self.findById(object_id)] = None
+            self.objects[self.indexes[object_id]] = None
             Log.i(TAG, "Object Replaced by None")
             return True
         else:
@@ -275,7 +276,7 @@ class Collection:
             returns object associated with the given object_id.
         """
         try:
-            Log.i(TAG, "Fetching object by id")
+            Log.i(TAG, f"Fetching object by id {object_id}")
             return self.objects[self.indexes[object_id]]
 
         except KeyError:
