@@ -57,14 +57,14 @@ def __generateColFileName() -> str:
 
 def __getCollectionNameForDisk(collection: Collection) -> str:
     query = f""" 
-            time_stamp = it,
+            time_stamp,
             db_name &eq "{collection.parent}", 
             col_name &eq "{collection.col_name}"
             """
     Log.d(TAG, "Searching collection name for disk")
     data = Collections.meta_collection.readOne(parser.parser(query))[0]
     Log.d(TAG, f"Collection name for disk is {data}")
-    Log.d(TAG, f"{data.get('time_stamp').col}")
+    Log.d(TAG, f"{data.get('time_stamp')}.col")
     return str(data.get("time_stamp"))
 
 
