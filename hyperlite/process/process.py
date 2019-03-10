@@ -165,6 +165,33 @@ class ReadByIdProcess(Process):
         return acknowledgement
 
 
+class DataPipelineProcess(Process):
+    def __init__(self, data):
+        self.data = data
+        self.output = []
+        Log.i(TAG, "DataPipelineProcess created.")
+
+    def exec(self):
+        Log.i(TAG, "Executing DataPipelineProcess.")
+        database = self.data.get('Database')
+        mainColName = self.data.get('Collection')
+        targetColName = self.data.get('to')
+        fieldAddress = self.data.get('fieldRef')
+        mainCollection = Collections.get_collection(mainColName, database)
+        targetCollection = Collections.get_collection(targetColName, database)
+        references = mainCollection.read(parser.parser(f"{fieldAddress}"))
+        for reference in references:
+            if type(references) is list:
+                for ref in reference:
+                    self.output.append(targetCollection.findById(ref.get(DataPipelineProcess.getLastFieldSegment(fieldAddress))))
+            else:
+                self.output = targetCollection.findById(reference.get(DataPipelineProcess.getLastFieldSegment(fieldAddress)))
+
+    @staticmethod
+    def getLastFieldSegment(fieldRef):
+        return fieldRef.split('.')[-1]
+
+
 def renderRIDUProcess(parsed_data):
     Log.i(TAG, "Rendering Process...")
     if parsed_data.request_type == 'Read':

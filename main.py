@@ -14,7 +14,7 @@ from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
 from hyperlite.collection import Collection, Collections
-from hyperlite.process.process import renderProcess, renderRIDUProcess
+from hyperlite.process.process import renderProcess, renderRIDUProcess, DataPipelineProcess
 from hyperlite import config
 from hyperlite.logger import Log
 from storage_engine import initializer
@@ -63,6 +63,10 @@ if __name__ == "__main__":
         # TODO: Adding subscription plan
         loop_runner.loop.subscriptions.put()
 
+    def onPipeline(data):
+        Log.d(TAG, f"New data pipeline request - {data}")
+        loop_runner.loop.query_processes.put(DataPipelineProcess(data))
+        manage_loop_status()
 
     def onCollectionChange(collection: Collection):
         Log.i(TAG, "Event -> Collection Changed")
@@ -76,4 +80,5 @@ if __name__ == "__main__":
     Event.on('request', onRequest)
     Event.on('col-change', onCollectionChange)
     Event.on('req_sub', onSubscription)
+    Event.on('req_pipe', onPipeline)
     listenForConnection()

@@ -44,6 +44,9 @@ class Socket(socket.socket):
                     elif json_query['type'] is not None and json_query['type'] == 'Subscription':
                         Log.d(TAG, f"Client is requesting for subscription")
                         Event.emmit('req_sub', json.dumps(json_query))
+                    elif json_query['type'] is not None and json_query['type'] == "Pipeline":
+                        Log.d(TAG, f"Client is requesting for Data Pipeline")
+                        Event.emmit('req_pipe', json_query)
 
                     # code to communicate with hyperlite engine
                 except ConnectionResetError as err:
@@ -52,7 +55,7 @@ class Socket(socket.socket):
                     Log.d(TAG, f"{self.clients}")
                     self.clients.remove(clientObj)
                     Log.i(TAG, "Client removed from Clients list")
-                    Log.d(TAG, f"{self.clients}")
+                    Log.d(TAG, f"Connected clients -> {self.clients if len(self.clients) != 0 else 'No Clients'}")
                     break
                 except Exception as err:
                     Log.e(TAG, f"Connection broken -> {err}")
