@@ -69,54 +69,57 @@ class Collection:
         for hy_object in update_objects:
             for prop in new_data:
                 if type(new_data[prop]) is dict:
-                    operator = list(new_data[prop].keys())[0]
+                    Log.d(TAG, f"{new_data[prop]}")
+                    prop1 = list(new_data[prop].keys())[0]
+                    operator = list(new_data[prop][prop1].keys())[0]
+                    Log.d(TAG, f"{operator}")
                     if operator == "&inc":
                         try:
                             Log.i(TAG, "Performing &inc operation...")
-                            hy_object[prop] += new_data[prop][operator]
+                            hy_object[prop] += new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] += new_data[prop][operator]
+                            hy_object[prop] += new_data[prop][prop1][operator]
 
                     if operator == "&dec":
                         try:
                             Log.i(TAG, "Performing &dec operation...")
-                            hy_object[prop] -= new_data[prop][operator]
+                            hy_object[prop] -= new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] -= new_data[prop][operator]
+                            hy_object[prop] -= new_data[prop][prop1][operator]
 
                     if operator == "&mul":
                         try:
                             Log.i(TAG, "Performing &mul operation...")
-                            hy_object[prop] *= new_data[prop][operator]
+                            hy_object[prop] *= new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] *= new_data[prop][operator]
+                            hy_object[prop] *= new_data[prop][prop1][operator]
 
                     if operator == "&div":
                         try:
                             Log.i(TAG, "Performing &div operation...")
-                            hy_object[prop] /= new_data[prop][operator]
+                            hy_object[prop] /= new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] /= new_data[prop][operator]
+                            hy_object[prop] /= new_data[prop][prop1][operator]
 
                     if operator == "&pow":
                         try:
                             Log.i(TAG, "Performing &pow operation...")
-                            hy_object[prop] **= new_data[prop][operator]
+                            hy_object[prop] **= new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] **= new_data[prop][operator]
+                            hy_object[prop] **= new_data[prop][prop1][operator]
 
                     if operator == "&floor":
                         try:
                             Log.i(TAG, "Performing &floor operation...")
-                            hy_object[prop] //= new_data[prop][operator]
+                            hy_object[prop] //= new_data[prop][prop1][operator]
                         except KeyError:
                             hy_object[prop] = 0
-                            hy_object[prop] //= new_data[prop][operator]
+                            hy_object[prop] //= new_data[prop][prop1][operator]
 
                 else:
                     Log.i(TAG, "Performing data insert operation...")
