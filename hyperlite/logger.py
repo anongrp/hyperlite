@@ -92,9 +92,9 @@ class Log:
         Log.logger.critical(message)
 
 
-TAG = __file__.split('/')[len(__file__.split('/')) - 1]
-Log.d(TAG, "Its a debug , just for test")
-Log.i(TAG, "Ack delivered to client")
-Log.e(TAG, "Its a error in collection class, File not found")
-Log.w(TAG, "Its a warning program takes too much of time to write file on disk")
-Log.c(TAG, "its a critical part its not good for speed")
+# TAG = __file__.split('/')[len(__file__.split('/')) - 1]
+# Log.d(TAG, "Its a debug , just for test")
+# Log.i(TAG, "Ack delivered to client")
+# Log.e(TAG, "Its a error in collection class, File not found")
+# Log.w(TAG, "Its a warning program takes too much of time to write file on disk")
+# Log.c(TAG, "its a critical part its not good for speed")

@@ -232,6 +232,11 @@ if __name__ == "__main__":
             $limit : 104,
             $sort : -name
             """
+    query = """
+        time_stamp,
+        db_name &eq "test.db",
+        col_name &eq "users"
+    """
     obj = parser(query)
     print(obj.view)
     for instruction in obj.selective:
