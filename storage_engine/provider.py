@@ -6,7 +6,7 @@ from hyperql.parser import parser
 from hyperlite.event import Event
 from hyperlite.collection import Collection
 
-TAG = "StorageEngine Provider"
+TAG = "Provider"
 
 
 class Provider(object):
@@ -45,11 +45,11 @@ class Provider(object):
                     result_col = collection
                     break
             if result_col is not None:
-                print("Getting collection from ram")
+                Log.i(TAG, "Getting collection from Ram")
                 return result_col
             else:
                 # Fetching or create new Collection
-                print("Fetching or create new Collection")
+                Log.i(TAG, "Fetching or create new Collection")
                 query = f"""
                             time_stamp,
                             db_name &eq "{db_name}",
@@ -57,11 +57,11 @@ class Provider(object):
                             """
                 result = Provider.meta_collection.readOne(parser(query))
                 if not result:
-                    print("Getting new collection because collection is not in ram and also on a disk")
+                    Log.i(TAG, "Creating new collection")
                     return Provider.create_new_collection(col_name, db_name)
                 else:
                     result = result[0]
-                    print("Getting collection from disk")
+                    Log.i(TAG, "Getting collection from disk")
                     result = loadCollection(
                         config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
                     Provider.add_collection(result)
@@ -74,15 +74,31 @@ class Provider(object):
                         """
             result = Provider.meta_collection.readOne(parser(query))
             if not result:
-                print("Getting new collection: @no database found")
+                Log.i(TAG, "Creating new collection")
                 return Provider.create_new_collection(col_name, db_name)
             else:
                 result = result[0]
-                print("Getting collection from disk: @root else")
+                Log.i(TAG, "Getting collection from disk")
                 result = loadCollection(
                     config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
                 Provider.add_collection(result)
                 return result
+
+    @staticmethod
+    def getDatabases() -> [str]:
+        databases = []
+        records = Provider.meta_collection.read(parser("db_name"))
+        for record in records:
+            databases.append(record['db_name'])
+        return databases
+
+    @staticmethod
+    def getCollection(database: str) -> [str]:
+        collections = []
+        records = Provider.meta_collection.read(parser(f"col_name, db_name &eq \"{database}\""))
+        for record in records:
+            collections.append(record['col_name'])
+        return collections
 
 
 def loadCollection(path):

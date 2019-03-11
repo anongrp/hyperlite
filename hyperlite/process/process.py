@@ -164,6 +164,28 @@ class ReadByIdProcess(Process):
         return acknowledgement
 
 
+class DatabasedProviderProcess(Process):
+    def __init__(self, data):
+        self.data = data
+
+    def exec(self):
+        return {
+            "Ack": Provider.getDatabases(),
+            "addr": self.data['addr']
+        }
+
+
+class CollectionProviderProcess(Process):
+    def __init__(self, data):
+        self.data = data
+
+    def exec(self):
+        return {
+            "Ack": Provider.getCollection(self.data['of']),
+            "addr": self.data['addr']
+        }
+
+
 class DataPipelineProcess(Process):
     def __init__(self, data):
         self.data = data
@@ -203,7 +225,7 @@ class DataPipelineProcess(Process):
 
 
 def renderRIDUProcess(parsed_data):
-    Log.i(TAG, "Rendering Process...")
+    Log.i(TAG, f"Rendering {parsed_data.request_type} Process...")
     if parsed_data.request_type == 'Read':
         return ReadProcess(parsed_data)
     elif parsed_data.request_type == 'Update':
@@ -220,6 +242,17 @@ def renderRIDUProcess(parsed_data):
         return UpdateOneProcess(parsed_data)
     else:
         Log.e(TAG, "No compatible request_type found.")
+        return None
+
+
+def renderProviderProcess(data):
+    Log.i(TAG, f"Rendering {data['show']} Provider Process...")
+    show = data['show']
+    if show == "Databases":
+        return DatabasedProviderProcess(data)
+    elif show == "Collections":
+        return CollectionProviderProcess(data)
+    else:
         return None
 
 

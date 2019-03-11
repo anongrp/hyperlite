@@ -14,7 +14,7 @@ from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
 from hyperlite.collection import Collection
-from hyperlite.process.process import renderProcess, renderRIDUProcess, DataPipelineProcess
+from hyperlite.process.process import renderProcess, renderRIDUProcess, DataPipelineProcess, renderProviderProcess
 from hyperlite import config
 from hyperlite.logger import Log
 from storage_engine.provider import Provider, loadCollection
@@ -69,6 +69,11 @@ if __name__ == "__main__":
         loop_runner.loop.query_processes.put(DataPipelineProcess(data))
         manage_loop_status()
 
+    def onProviderRequest(data):
+        Log.d(TAG, f"New provider request - {data}")
+        loop_runner.loop.query_processes.put(renderProviderProcess(data))
+        manage_loop_status()
+
     def onCollectionChange(collection: Collection):
         Log.i(TAG, "Event -> Collection Changed")
         for proc in renderProcess(collection):
@@ -82,4 +87,5 @@ if __name__ == "__main__":
     Event.on('col-change', onCollectionChange)
     Event.on('req_sub', onSubscription)
     Event.on('req_pipe', onPipeline)
+    Event.on('req_provider', onProviderRequest)
     listenForConnection()
