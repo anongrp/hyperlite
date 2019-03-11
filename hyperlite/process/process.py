@@ -59,6 +59,25 @@ class ReadProcess(Process):
         }
 
 
+class InsertAllProcess(Process):
+    def __init__(self, parsed_data):
+        self.data = parsed_data
+        Log.i(TAG, "InsertAllProcess created.")
+
+    def exec(self):
+        Log.i(TAG, "Executing InsertAllProcess.")
+        db_name, col_name = BaseRIDUProcess.meta_separator(self.data.meta_data)
+        col = Provider.get_collection(col_name, db_name)
+        Log.d(TAG, "......")
+        acknowledgement = {
+            "Ack": col.insertAll(self.data.user_data),
+            "addr": self.data.addr
+        }
+
+        Event.emmit('col-change', col)
+        return acknowledgement
+
+
 class InsertProcess(Process):
     def __init__(self, parsed_data):
         self.data = parsed_data
@@ -240,6 +259,8 @@ def renderRIDUProcess(parsed_data):
         return ReadOneProcess(parsed_data)
     elif parsed_data.request_type == 'UpdateOne':
         return UpdateOneProcess(parsed_data)
+    elif parsed_data.request_type == 'InsertAll':
+        return InsertAllProcess(parsed_data)
     else:
         Log.e(TAG, "No compatible request_type found.")
         return None

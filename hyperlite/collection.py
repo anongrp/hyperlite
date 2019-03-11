@@ -55,6 +55,22 @@ class Collection:
         })
         return object_id
 
+    def insertAll(self, user_data: list):
+        """
+        InsertAll operations: Useful for Inserting a list of objects together.
+        :param user_data: list of data to be inserted
+        :return: objects_id: list of _id of inserted objects
+        """
+        objects_id = []
+        if type(user_data) is list:
+            Log.d(TAG, "Type list")
+            for data in user_data:
+                if type(data) is dict:
+                    Log.d(TAG, "Type dict")
+                    objects_id.append(self.insert(data))
+        Log.d(TAG, f"{objects_id}")
+        return objects_id
+
     def _update(self, new_data: dict, update_objects: list):
         """     Private method to update an object of the collection.    """
 
