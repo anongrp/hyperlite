@@ -13,11 +13,11 @@ from hyperlite import event_loop
 from hyperlite.request_parser import Parser
 from hyperlite.event import Event
 from server import Socket
-from hyperlite.collection import Collection, Collections
+from hyperlite.collection import Collection
 from hyperlite.process.process import renderProcess, renderRIDUProcess, DataPipelineProcess
 from hyperlite import config
 from hyperlite.logger import Log
-from storage_engine import initializer
+from storage_engine.provider import Provider, loadCollection
 
 TAG = "Main_Process"  # Constant used just for logging
 
@@ -32,12 +32,12 @@ def initMe():
     Log.w(TAG, f"We are running on {config.PLATFORM} Operating System")
     Log.i(TAG, f"Database files can be found on {config.DATABASE_PATH} ")
     if os.path.exists(config.COLLECTION_PATH):
-        meta_col = initializer.getCollection(config.COLLECTION_PATH)
-        Collections.meta_collection = meta_col
+        meta_col = loadCollection(config.COLLECTION_PATH)
+        Provider.meta_collection = meta_col
         Log.i(TAG, "Meta collection found on disk")
     else:
         meta_col = Collection("hyperlite.col", "MetaData")
-        Collections.meta_collection = meta_col
+        Provider.meta_collection = meta_col
         Log.w(TAG, "Meta collection file not found so creating new meta collection")
 
 
@@ -73,7 +73,7 @@ if __name__ == "__main__":
         Log.i(TAG, "Event -> Collection Changed")
         for proc in renderProcess(collection):
             loop_runner.loop.system_process.put(proc)
-        for proc in renderProcess(Collections.meta_collection):
+        for proc in renderProcess(Provider.meta_collection):
             loop_runner.loop.system_process.put(proc)
         manage_loop_status()
 

@@ -1,5 +1,6 @@
 from storage_engine import coliter
-from ..collection import Collection, Collections
+from storage_engine.provider import Provider
+from ..collection import Collection
 from hyperql import parser
 from ..event import Event
 from hyperlite.logger import Log
@@ -50,7 +51,7 @@ class ReadProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing ReadProcess.")
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         query_object = parser.parser(query)
         return {
             "Ack": col.read(query_object),
@@ -66,7 +67,7 @@ class InsertProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing InsertProcess.")
         db_name, col_name = BaseRIDUProcess.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         acknowledgement = {
             "Ack": col.insert(self.data.user_data),
             "addr": self.data.addr
@@ -84,7 +85,7 @@ class UpdateProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing UpdateProcess.")
         db_name, col_name, query = Collection.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         query_object = parser.parser(query)
         acknowledgement = {
             "Ack": col.updateAll(query_object, self.data.user_data),
@@ -103,7 +104,7 @@ class DeleteProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing DeleteProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         acknowledgement = {
             "Ack": col.delete(object_id),
             "addr": self.data.addr
@@ -121,7 +122,7 @@ class ReadOneProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing ReadOneProcess.")
         db_name, col_name, query = BaseRIDUProcess.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         query_object = parser.parser(query)
         return {
             "Ack": col.readOne(query_object),
@@ -137,7 +138,7 @@ class UpdateOneProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing UpdateOneProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         acknowledgement = {
             "Ack": col.updateOne(object_id, self.data.user_data),
             "addr": self.data.addr
@@ -155,7 +156,7 @@ class ReadByIdProcess(Process):
     def exec(self):
         Log.i(TAG, "Executing ReadByIdProcess.")
         db_name, col_name, object_id = Collection.meta_separator(self.data.meta_data)
-        col = Collections.get_collection(col_name, db_name)
+        col = Provider.get_collection(col_name, db_name)
         acknowledgement = {
             "Ack": col.findById(object_id),
             "addr": self.data.addr
@@ -176,8 +177,8 @@ class DataPipelineProcess(Process):
         targetColName = self.data.get('to')
         fieldAddress = self.data.get('fieldRef')
 
-        mainCollection = Collections.get_collection(mainColName, database)
-        targetCollection = Collections.get_collection(targetColName, database)
+        mainCollection = Provider.get_collection(mainColName, database)
+        targetCollection = Provider.get_collection(targetColName, database)
         references = mainCollection.read(parser.parser(f"{fieldAddress}"))
         ref_key = DataPipelineProcess.getLastFieldSegment(fieldAddress)
         print(mainCollection.read(parser.parser(self.data.get('query'))))

@@ -2,8 +2,9 @@ import _pickle
 import multiprocessing
 from hyperlite import config
 from hyperql import parser
-from hyperlite.collection import Collection, Collections
+from hyperlite.collection import Collection
 from hyperlite.logger import Log
+from .provider import Provider
 
 import os
 import time
@@ -62,7 +63,7 @@ def __getCollectionNameForDisk(collection: Collection) -> str:
             col_name &eq "{collection.col_name}"
             """
     Log.d(TAG, "Searching collection name for disk")
-    data = Collections.meta_collection.readOne(parser.parser(query))[0]
+    data = Provider.meta_collection.readOne(parser.parser(query))[0]
     Log.d(TAG, f"Collection name for disk is {data}")
     Log.d(TAG, f"{data.get('time_stamp')}.col")
     return str(data.get("time_stamp"))

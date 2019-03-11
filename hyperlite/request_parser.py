@@ -24,7 +24,7 @@ class Parser:
 class ParsedData:
 
     def __init__(self):
-        self.request_type: RequestType
+        self.request_type: RequestType = None
         self.meta_data: dict = {}
         self.user_data: dict = {}
         self.addr: str = None

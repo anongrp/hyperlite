@@ -14,14 +14,10 @@
     --------------------
 """
 
-import time
 import uuid
 import copy
 
-from hyperlite.event import Event
 from hyperql import parser
-from storage_engine import initializer
-from hyperlite import config
 from .logger import Log
 
 DEFAULT_QUERY = parser.Query()
@@ -49,7 +45,8 @@ class Collection:
         :param user_data: it's a type of dictionary
         :return: objectId: it's a type of string
         """
-        object_id = Objects.generate_id()  # unique id for every object
+
+        object_id = uuid.uuid4().hex  # unique id for every object
         user_data['_id'] = object_id
         self.objects.append(user_data)  # append new object to objects list
 
@@ -253,98 +250,3 @@ class Collection:
             if meta_data is of Update RequestType, then returns list containing db_name, col_name and object_id.
         """
         return [meta for meta in meta_data.values()]
-
-
-class Collections:
-    """   Maintains record of all Collections   """
-    collection_list = {}
-    meta_collection: Collection = None
-
-    @classmethod
-    def create_new_collection(cls, col_name, db_name):
-        new_collection = Collection(col_name, db_name)
-        Collections.add_collection(new_collection)
-        Collections.meta_collection.insert({
-            "db_name": db_name,
-            "col_name": col_name,
-            "time_stamp": parserTimeStamp(str(time.time())),  # its helps to find this collection on disk
-            "user": "Anonymous"
-        })
-        Event.emmit('col-change', Collections.meta_collection)
-        return new_collection
-
-    @classmethod
-    def add_collection(cls, collection: Collection):
-        if Collections.collection_list.get(collection.parent) is not None:
-            Collections.collection_list.get(collection.parent).add(collection)
-        else:
-            Collections.collection_list.update({
-                collection.parent: {collection}
-            })
-
-    @classmethod
-    def get_collection(cls, col_name: str, db_name):
-        if Collections.collection_list.get(db_name) is not None:
-            database = Collections.collection_list.get(db_name)
-            result_col = None
-            for collection in database:
-                if col_name == collection.col_name:
-                    result_col = collection
-                    break
-            if result_col is not None:
-                print("Getting collection from ram")
-                return result_col
-            else:
-                # Fetching or create new Collection
-                print("Fetching or create new Collection")
-                query = f"""
-                        time_stamp,
-                        db_name &eq "{db_name}",
-                        col_name &eq "{col_name}"
-                        """
-                result = Collections.meta_collection.readOne(parser.parser(query))
-                if not result:
-                    print("Getting new collection because collection is not in ram and also on a disk")
-                    return Collections.create_new_collection(col_name, db_name)
-                else:
-                    result = result[0]
-                    print("Getting collection from disk")
-                    result = initializer.getCollection(
-                        config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
-                    Collections.add_collection(result)
-                    return result
-        else:
-            query = f"""
-                    time_stamp,
-                    db_name &eq "{db_name}",
-                    col_name &eq "{col_name}"
-                    """
-            result = Collections.meta_collection.readOne(parser.parser(query))
-            if not result:
-                print("Getting new collection: @no database found")
-                return Collections.create_new_collection(col_name, db_name)
-            else:
-                result = result[0]
-                print("Getting collection from disk: @root else")
-                result = initializer.getCollection(
-                    config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")
-                Collections.add_collection(result)
-                return result
-
-
-def parserTimeStamp(time_stamp):
-    return time_stamp[0: time_stamp.find('.')]
-
-
-def getPathSeparator() -> str:
-    return "/" if config.PLATFORM == "Linux" else r"\\"
-
-
-class Objects:
-    """ Helps to Maintain record of all Objects """
-    object_count = 0
-
-    @classmethod
-    def generate_id(cls) -> str:
-        obj_id = uuid.uuid4()
-        return str(obj_id.hex)
