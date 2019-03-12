@@ -177,7 +177,7 @@ class Collection:
                             break
         return output_objs
 
-    def _read(self, objects: list, instruction, view=None, modifiers=None):
+    def _read(self, objects: list, instruction, view, modifiers):
         """     Private method to read the Objects data from the collection.    """
 
         output_objs = []
@@ -228,19 +228,15 @@ class Collection:
             query parsing.
         """
 
-        filtered_data = self.objects
-
-        if query_object.selective:
-            for instruction in query_object.selective:
-                filtered_data = self.execSelectiveQuery(objects=filtered_data, instruction=instruction)
+        filtered_data = self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
 
         if one_flag is True:
             if not filtered_data:
                 return filtered_data
             else:
-                return self._read(objects=[filtered_data[0]], view=query_object.view, modifiers=query_object.modifiers)
+                return filtered_data[0]
 
-        return self._read(objects=filtered_data, view=query_object.view, modifiers=query_object.modifiers)
+        return filtered_data
 
     def delete(self, object_id: str) -> bool:
         """
