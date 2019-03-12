@@ -32,22 +32,22 @@ class QueryOperations:
     @staticmethod
     def greater_than(data, field):
         """
-        just for not equal (">") operation
+        just for not equal ("<") operation
         :param data: its a immutable data that passed by user via hyperQl
         :param field: its a mutable and point to actual field data in collection
         :return: Boolean after greater than check
         """
-        return data > field
+        return data < field
 
     @staticmethod
     def less_than(data, field):
         """
-        just for not equal ("<") operation
+        just for not equal (">") operation
         :param data: its a immutable data that passed by user via hyperQl
         :param field: its a mutable and point to actual field data in collection
         :return: Boolean after less than check
         """
-        return data < field
+        return data > field
 
     @staticmethod
     def greater_than_equal(data, field):
@@ -57,7 +57,7 @@ class QueryOperations:
         :param field: its a mutable and point to actual field data in collection
         :return: Boolean after greater than equal check
         """
-        return data >= field
+        return data <= field
 
     @staticmethod
     def less_than_equal(data, field):
@@ -67,7 +67,17 @@ class QueryOperations:
         :param field: its a mutable and point to actual field data in collection
         :return: Boolean after less than equal check
         """
-        return data <= field
+        return data >= field
+
+    @staticmethod
+    def in_operation(data, field):
+        """
+        just for not equal ("&") operation
+        :param data: its a immutable data that passed by user via hyperQl
+        :param field: its a mutable and point to actual field data in collection
+        :return: Boolean after and operation
+        """
+        return data in field
 
     @staticmethod
     def and_operation(data, field):
@@ -111,7 +121,8 @@ class QueryOperations:
             "&gt": QueryOperations.greater_than,
             "&lt": QueryOperations.less_than,
             "&gte": QueryOperations.greater_than_equal,
-            "&lte": QueryOperations.less_than_equal
+            "&lte": QueryOperations.less_than_equal,
+            "&in": QueryOperations.in_operation,
         }
         return operations.get(cmd)
 
@@ -172,6 +183,8 @@ def parser(query: str) -> Query:
                 return True
             elif raw_data.lower() == 'false':
                 return False
+            elif raw_data.find('.') > -1:
+                return float(raw_data)
             return int(raw_data)
 
     def parse_filters(raw_query):
