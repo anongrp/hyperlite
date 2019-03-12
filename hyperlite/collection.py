@@ -228,15 +228,15 @@ class Collection:
             query parsing.
         """
 
-        filtered_data = self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
-
         if one_flag is True:
+            query_object.modifiers['limit'] = 1
+            filtered_data = self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
             if not filtered_data:
                 return filtered_data
             else:
                 return filtered_data[0]
-
-        return filtered_data
+        else:
+            return self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
 
     def delete(self, object_id: str) -> bool:
         """
