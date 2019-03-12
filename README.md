@@ -18,6 +18,8 @@
 Hyperlite is an event based and NoSql realtime database that provides a simple way to store and manage complex data. It works on non blocking mechanism. In Hyperlite, data is stored into objects, fields, and collections, and it is auto indexed to make it easier to find relevant information.
 It works on RIDU Operation which can be done by **HyperQl**, the standard Hyperlite database query language that makes it easier to communicate with the database. Hyperlite offers excellent concurrency, high performance, and powerful language support for storage and subscriptions. It can be used in any complex and real time production systems.
 
+[Data Flow Diagram](https://cdn-images-1.medium.com/max/1500/1*Iq0NQaCMdGbMpG6dT8R3cA.png)
+
 ## Why Hyperlite ?...
 * Lightweight 
 * Simple languge for querying Complex data (HyperQl)
