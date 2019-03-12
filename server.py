@@ -32,7 +32,6 @@ class Socket(socket.socket):
                 try:
                     raw_query = str(client.recv(1024 * 1024 * 1024).decode("UTF-8"))
                     Log.d(TAG, f"Received data from client {addr}")
-                    Log.d(TAG, f"Data -> {raw_query}")
                     if raw_query.lower() == 'exit':
                         client.close()
                         break
@@ -74,7 +73,6 @@ class Socket(socket.socket):
                     break
 
     def send_ack(self, ack):
-        Log.d(TAG, f"Query Task ack -> {ack}")
         for client in self.clients:
             if str(client["addr"]) == ack["addr"]:
                 Log.i(TAG, "Ack has send to client")

@@ -60,7 +60,6 @@ class Provider(object):
                     Log.i(TAG, "Creating new collection")
                     return Provider.create_new_collection(col_name, db_name)
                 else:
-                    result = result[0]
                     Log.i(TAG, "Getting collection from disk")
                     result = loadCollection(
                         config.DATABASE_PATH + getPathSeparator() + str(result.get("time_stamp")) + ".col")
@@ -77,7 +76,6 @@ class Provider(object):
                 Log.i(TAG, "Creating new collection")
                 return Provider.create_new_collection(col_name, db_name)
             else:
-                result = result[0]
                 Log.i(TAG, "Getting collection from disk")
                 result = loadCollection(
                     config.DATABASE_PATH + getPathSeparator() + str(result.get('time_stamp')) + ".col")

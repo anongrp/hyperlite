@@ -138,9 +138,9 @@ class Collection:
         for instruction in query_object.selective:
 
             if filtered_data is None:
-                filtered_data = self.execSelectiveQuery(objects=self.objects, instruction=instruction)
+                filtered_data = self._read(objects=self.objects, instruction=instruction)
             else:
-                filtered_data = self.execSelectiveQuery(objects=filtered_data, instruction=instruction)
+                filtered_data = self._read(objects=filtered_data, instruction=instruction)
 
         return self._update(new_data=new_data, update_objects=filtered_data)
 
@@ -158,49 +158,34 @@ class Collection:
         else:
             return False
 
-    def execSelectiveQuery(self, objects: list, instruction):
-        output_objs = []
-
-        for hy_object in objects:
-            if instruction['field'].find('.') == -1:
-                if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'],
-                                                                               field=hy_object[
-                                                                                   instruction['field']]):
-                    output_objs.append(hy_object)
-            else:
-                currentObj = hy_object
-                for field in instruction['field'].split('.'):
-                    if field in currentObj:
-                        currentObj = currentObj[field]
-                        if instruction['filter'](data=instruction['data'], field=currentObj):
-                            output_objs.append(hy_object)
-                            break
-        return output_objs
-
-    def _read(self, objects: list, instruction, view, modifiers):
+    def _read(self, objects: list, instruction={}, view=None, modifiers=None, limit=-1):
         """     Private method to read the Objects data from the collection.    """
 
         output_objs = []
+        noOfRecord = limit
 
-        for hy_object in objects:
-            isNeeded = False
-            if instruction['field'].find('.') == -1:
-                if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'],
-                                                                               field=hy_object[
-                                                                                   instruction['field']]):
-                    # output_objs.append(hy_object)
-                    isNeeded = True
-            else:
-                currentObj = hy_object
-                for field in instruction['field'].split('.'):
-                    if field in currentObj:
-                        currentObj = currentObj[field]
-                        if instruction['filter'](data=instruction['data'], field=currentObj):
-                            # output_objs.append(hy_object)
-                            isNeeded = True
-                            break
-            if isNeeded:
-                if type(view) is list:
+        if instruction != {}:
+            for hy_object in objects:
+                if noOfRecord != -1 and noOfRecord == len(output_objs):
+                    break
+                else:
+                    if instruction['field'].find('.') == -1:
+                        if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'],
+                                                                                       field=hy_object[
+                                                                                           instruction['field']]):
+                            output_objs.append(hy_object)
+                    else:
+                        currentObj = hy_object
+                        for field in instruction['field'].split('.'):
+                            if field in currentObj:
+                                currentObj = currentObj[field]
+                                if instruction['filter'](data=instruction['data'], field=currentObj):
+                                    output_objs.append(hy_object)
+                                    break
+
+        else:
+            if type(view) is list:
+                for hy_object in objects:
                     output_obj = {}
                     for instruction in view:
                         currentObj = hy_object
@@ -211,11 +196,11 @@ class Collection:
                                 currentObj = None
                         output_obj[instruction] = currentObj
                     output_objs.append(output_obj)
-                else:
-                    output_objs.append(hy_object)
-        if modifiers != DEFAULT_QUERY.modifiers:
-            if modifiers is not None:
-                output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
+            else:
+                output_objs = objects
+            if modifiers != DEFAULT_QUERY.modifiers:
+                if modifiers is not None:
+                    output_objs = output_objs[modifiers['skip']:modifiers['skip'] + modifiers['limit']]
 
         return output_objs
 
@@ -227,16 +212,30 @@ class Collection:
             filtered_data stores the remaining data after every iteration of
             query parsing.
         """
-
+        filtered_data = self.objects
+        if query_object.selective:
+            for instruction in query_object.selective:
+                filtered_data = self._read(objects=filtered_data, instruction=instruction, limit=query_object.modifiers['limit'])
         if one_flag is True:
-            query_object.modifiers['limit'] = 1
-            filtered_data = self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
             if not filtered_data:
                 return filtered_data
             else:
-                return filtered_data[0]
-        else:
-            return self._read(self.objects, query_object.selective, query_object.view, query_object.modifiers)
+                return self._read(objects=[filtered_data[0]], view=query_object.view, modifiers=query_object.modifiers)[0]
+
+        # if one_flag is True:
+        #     query_object.modifiers['limit'] = 1
+        #     if query_object.selective:
+        #         for instruction in query_object.selective:
+        #             filtered_data = self._read(objects=filtered_data, instruction=instruction)
+        #
+        #     if not filtered_data:
+        #         return None
+        #     else:
+        #         return filtered_data[0]
+        # else:
+        #     return self._read(objects=filtered_data, view=query_object.view, modifiers=query_object.modifiers)
+
+        return self._read(objects=filtered_data, view=query_object.view, modifiers=query_object.modifiers)
 
     def delete(self, object_id: str) -> bool:
         """
