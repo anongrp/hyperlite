@@ -61,6 +61,8 @@ class Collection:
         :param user_data: list of data to be inserted
         :return: objects_id: list of _id of inserted objects
         """
+        Log.d(TAG, type(user_data))
+        Log.d(TAG, type(user_data[0]))
         objects_id = []
         if type(user_data) is list:
             Log.d(TAG, "Type list")
@@ -164,7 +166,9 @@ class Collection:
         if instruction != {}:
             for hy_object in objects:
                 if instruction['field'].find('.') == -1:
-                    if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'], field=hy_object[instruction['field']]):
+                    if instruction['field'] in hy_object and instruction['filter'](data=instruction['data'],
+                                                                                   field=hy_object[
+                                                                                       instruction['field']]):
                         output_objs.append(hy_object)
                 else:
                     currentObj = hy_object
@@ -180,13 +184,13 @@ class Collection:
                 for hy_object in objects:
                     output_obj = {}
                     for instruction in view:
-                        hy_object_copy = copy.deepcopy(hy_object)
+                        currentObj = hy_object
                         for instruct in instruction.split('.'):
-                            if hy_object_copy[instruct]:
-                                hy_object_copy = hy_object_copy[instruct]
+                            if instruct in currentObj:
+                                currentObj = currentObj[instruct]
                             else:
-                                hy_object_copy = '%NOT_OBJECT%'
-                        output_obj[instruction] = hy_object_copy
+                                currentObj = None
+                        output_obj[instruction] = currentObj
                     output_objs.append(output_obj)
             else:
                 output_objs = objects
@@ -205,16 +209,11 @@ class Collection:
             query parsing.
         """
 
-        filtered_data = None
+        filtered_data = self.objects
 
-        if not query_object.selective:
-            filtered_data = self.objects
-        else:
+        if query_object.selective:
             for instruction in query_object.selective:
-                if filtered_data is None:
-                    filtered_data = self._read(objects=self.objects, instruction=instruction)
-                else:
-                    filtered_data = self._read(objects=filtered_data, instruction=instruction)
+                filtered_data = self._read(objects=filtered_data, instruction=instruction)
 
         if one_flag is True:
             if not filtered_data:

@@ -68,12 +68,10 @@ class InsertAllProcess(Process):
         Log.i(TAG, "Executing InsertAllProcess.")
         db_name, col_name = BaseRIDUProcess.meta_separator(self.data.meta_data)
         col = Provider.get_collection(col_name, db_name)
-        Log.d(TAG, "......")
         acknowledgement = {
             "Ack": col.insertAll(self.data.user_data),
             "addr": self.data.addr
         }
-
         Event.emmit('col-change', col)
         return acknowledgement
 

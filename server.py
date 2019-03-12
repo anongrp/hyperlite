@@ -30,7 +30,7 @@ class Socket(socket.socket):
             self.clients.append(clientObj)
             while True:
                 try:
-                    raw_query = str(client.recv(1024).decode("UTF-8"))
+                    raw_query = str(client.recv(1024 * 1024 * 1024).decode("UTF-8"))
                     Log.d(TAG, f"Received data from client {addr}")
                     Log.d(TAG, f"Data -> {raw_query}")
                     if raw_query.lower() == 'exit':

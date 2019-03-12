@@ -31,7 +31,7 @@ DATABASE_FORMAT = {
 
 DEFAULT = {
     "port": 8989,
-    "host": "localhost"
+    "host": "127.0.0.1"
 }
 
 LOG_DIRECTORY = DATABASE_PATH + __getPathSeparator() + "Log"
