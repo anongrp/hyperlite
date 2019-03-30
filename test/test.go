@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	data, err := ioutil.ReadFile("test/test.json")
+	data, err := ioutil.ReadFile("test/dummy_delete.json")
 
 	if err != nil {
 	  fmt.Print(err)
@@ -16,8 +16,7 @@ func main() {
 	//fmt.Println(data)
 
 	type DummyDelete struct {
-      name string
-      email string
+      Delete interface{}
     }
 
 	var obj DummyDelete
@@ -28,4 +27,7 @@ func main() {
     }
 
 	fmt.Println(obj)
+
+	obj1 := obj.Delete
+	fmt.Println(obj1)
 }
