@@ -15,7 +15,6 @@
 """
 
 import uuid
-import copy
 
 from hyperql import parser
 from .logger import Log
